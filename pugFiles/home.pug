@@ -2,7 +2,7 @@ doctype html
 
 script(src='../javaScript/draggable.js')
 
-link(href="https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap" rel="stylesheet")
+link(href='https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap' rel='stylesheet')
 
 script(type='text/javascript').
 	draggable('.dragMe');
@@ -15,7 +15,7 @@ html
 
 h1: #{pageName}
 
-div(class="inputFields")
+div(class='inputFields')
 	input#UserNameID.userDetailsClass(name='input1' type='text' placeholder='Name')
 	br
 	input#UserAgeID.userDetailsClass(name='input2' type='text' placeholder='Age')
@@ -25,24 +25,24 @@ div(class="inputFields")
 	button Save
 
 
-div(class='innerWindow dragMe' style="display: none;")
-	iframe(src='/users' width="50%" height="20%")
+div(class='innerWindow dragMe' style='display: none;')
+	iframe(src='/users' width='50%' height='20%')
 
 
 script(type='text/javascript').
-	$("button").click(function(){
+	$('button').click(function(){
 		var nameVal = $('.userDetailsClass')[0].value;
 		var ageVal = $('.userDetailsClass')[1].value;
 		var genderVal = $('.userDetailsClass')[2].value;
 
-	  $.post("/ajaxPOST",
+	  $.post('/ajaxPOST',
 	  {
 	    Name: nameVal,
 	    Age: ageVal,
 	    Gender: genderVal
 	  },
 	  function(data, status){
-	    alert("Data: " + data + "\nStatus: " + status);
+	    alert('Data: ' + data + '\nStatus: ' + status);
 	  });
 	  $('.userDetailsClass')[0].value = ''
 	  $('.userDetailsClass')[1].value = ''

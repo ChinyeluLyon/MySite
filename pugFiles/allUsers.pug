@@ -3,19 +3,19 @@ doctype html
 html
 	include Templates/header.pug
 
-table(align="center")
+table(align='center')
 	tr
 		th User ID
 		th Name
 		th Age
 		th Gender
-		th(class="editColumn")
+		th(class='editColumn')
 	each val in usersArr
 		tr
 			td= val.user_id
 			td= val.user_name
 			td= val.user_age
 			td= val.user_gender
-			td(class="editColumn") 
-				a(href="/users/"+val.user_id) editIcon
+			td(class='editColumn') 
+				a(href='/users/'+val.user_id) editIcon
 

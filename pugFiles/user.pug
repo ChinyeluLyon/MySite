@@ -3,16 +3,17 @@ doctype html
 html
 	include Templates/header.pug
 
+
 div(class='userCard')
-	div(class='userImagePlaceholder')
+	img(class="userImage" src='../uploads/Stevie-e1387477195621.png' height='100' width='100' style='border-radius:50px;')
 	
-	h1(class="userPageName") #{Name}
+	h1(class='userPageName') #{Name}
 	
-	div(class="userPageText")
+	div(class='userPageText')
 		a userID: #{ID} 
 		br
 		a Age: #{Age} 
 		br
 		a Gender: #{Gender} 
 
-button(class="editButton") edit
+button(class='editButton') edit

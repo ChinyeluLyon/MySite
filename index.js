@@ -11,6 +11,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, '/pugFiles'));
 app.use(express.urlencoded({ extended: true }));
 app.use("/javaScript", express.static(path.join(__dirname, "/javaScript")));
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 //Connect to my database
 var connection = mysql.createConnection({
@@ -102,7 +103,7 @@ app.post('/submit-form', (req, res) => {
 	new formidable.IncomingForm().parse(req)
 	.on('fileBegin', (name, file) => {
 		file.path = __dirname + '/uploads/' + file.name
-		var sqlQuery = 'INSERT INTO user_upload (file_name, file_path) VALUES ("'+file.path+'", "'+file.name+'")';
+		var sqlQuery = 'INSERT INTO user_upload (file_name, file_path, user_id) VALUES ("/uploads/' + file.name+'", "'+file.name+'", "1000")';
 		connection.query(sqlQuery, function(err, rows, fields){
 			if(err){
 				throw err;
