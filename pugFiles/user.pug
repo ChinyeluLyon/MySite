@@ -1,0 +1,18 @@
+doctype html
+
+html
+	include Templates/header.pug
+
+div(class='userCard')
+	div(class='userImagePlaceholder')
+	
+	h1(class="userPageName") #{Name}
+	
+	div(class="userPageText")
+		a userID: #{ID} 
+		br
+		a Age: #{Age} 
+		br
+		a Gender: #{Gender} 
+
+button(class="editButton") edit

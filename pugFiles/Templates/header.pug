@@ -1,0 +1,28 @@
+doctype html
+
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+
+link(href="https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap" rel="stylesheet")
+
+style
+	include ../../stylesheet.css
+
+div(optionsPannel)
+	ul
+		li
+			a(href="/signUp") Sign Up
+
+
+div(class='topBar')
+	h1 Chinyelu's Site
+	
+	ul
+		li
+			a(href="/") Home
+		li
+			a(href="/users") Users
+
+
+if {pageName}
+	h1 #{pageName} 
+	
