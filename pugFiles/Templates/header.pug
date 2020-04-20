@@ -7,20 +7,21 @@ link(href="https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap" r
 style
 	include ../../stylesheet.css
 
-div(optionsPannel)
-	ul
-		li
-			a(href="/signUp") Sign Up
-
-
 div(class='topBar')
-	h1 Chinyelu's Site
+	div(class='siteName')
+		a(href='/') Chinyelu's Site
 	
-	ul
-		li
-			a(href="/") Home
-		li
-			a(href="/users") Users
+	div(class='optionsPanel')
+		a(href="/signUp") Sign Up
+			
+	div(class='navBar')
+		h1 #{pageName} 
+		
+		ul
+			li
+				a(href="/") Home
+			li
+				a(href="/users") Users
 
 
 if {pageName}

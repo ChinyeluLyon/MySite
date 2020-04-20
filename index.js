@@ -75,17 +75,27 @@ app.route('/signUp').get(function(req, res){
 	res.render('signUp', {pageName: 'Sign Up'});
 });
 
-app.post('/ajaxPOST', function (req, res){  
+app.route('/logIn').get(function(req, res){
+	res.render('logIn', {pageName: 'Log In'});
+});
+
+
+app.post('/ajaxPOSTusers', function (req, res){  
 	console.log('Name: '+req.body.Name);
 	console.log('Age: '+req.body.Age);
 	console.log('Gender: '+req.body.Gender);
+	console.log('Password: '+req.body.Password);
 	console.log('req received');
 
 	if(!req.body.Name || !req.body.Age || !req.body.Gender){
 		console.log('Must fill all user fields!!');
 	}
 	else{
-		var sqlQuery = 'INSERT INTO users (user_name, user_age, user_gender) VALUES ("'+req.body.Name+'", '+req.body.Age+', "'+req.body.Gender+'");';
+		var sqlQuery = '\
+		INSERT INTO \
+		users (user_name, user_age, user_gender, user_password) \
+		VALUES ("'+req.body.Name+'", '+req.body.Age+', "'+req.body.Gender+'", "'+req.body.Password+'");\
+		';
 		connection.query(sqlQuery, function (err, rows, fields) {
 			if (err) {
 				throw err;
@@ -117,5 +127,13 @@ app.post('/submit-form', (req, res) => {
 	})
 
 })
+
+
+app.get('/ajaxGETpassword', function(req, res){
+	console.log('name: '+ req.body.Name);
+	console.log('p: '+ req.body.Password);
+});
+
+
 console.log('server running');
 var server = app.listen(8080,function() {});

@@ -15,39 +15,27 @@ html
 
 h1: #{pageName}
 
-- var uploadMessage = 'Select a user image'
-
-div(class='upload')
-	include fileUpload.pug
 
 div(class='inputFields')
 	input#UserNameID.userDetailsClass(name='input1' type='text' placeholder='Name')
 	br
-	input#UserAgeID.userDetailsClass(name='input2' type='text' placeholder='Age')
+	input#UserGenderID.userDetailsClass(name='input4' type='text' placeholder='Password')
 	br
-	input#UserGenderID.userDetailsClass(name='input3' type='text' placeholder='Gender')
-	br	
-	input#UserPasswordID.userDetailsClass(name='input4' type='text' placeholder='Password')
-
-	a(id='saveButton' href='/users') Save
-
+	a(id='saveButton' href='/users') Log In
 
 div(class='innerWindow dragMe' style='display: none;')
 	iframe(src='/users' width='50%' height='20%')
 
-
 script(type='text/javascript').
 	$('#saveButton').click(function(){
 		var nameVal = $('.userDetailsClass')[0].value;
-		var ageVal = $('.userDetailsClass')[1].value;
-		var genderVal = $('.userDetailsClass')[2].value;
-		var passwordVal = $('.userDetailsClass')[3].value;
+		var passwordVal = $('.userDetailsClass')[1].value;
+		alert(nameVal);
+		alert(passwordVal);
 
-	  $.post('/ajaxPOSTusers',
+	  $.get('/ajaxGETpassword',
 	  {
 	    Name: nameVal,
-	    Age: ageVal,
-	    Gender: genderVal,
 	    Password: passwordVal
 	  },
 	  function(data, status){

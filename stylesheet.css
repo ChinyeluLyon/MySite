@@ -1,11 +1,11 @@
 h1, h2, h3, a{
 	font-family: 'Sen', sans-serif;
 }
-.topBar h1, .topBar h2{
+.navBar h1, .navBar h2{
 	text-align: center;
 }
-
-.topBar {
+/*
+.navBar {
 	padding-top: 1vmax;
 	padding-right: 1vmax;
 	display: block;
@@ -13,21 +13,20 @@ h1, h2, h3, a{
 	width: 100%;
 	height: 100%;
 	position: relative;
-	top: -8px;
 	right: 8px;
 }
-
-.topBar ul {
+*/
+.navBar ul {
 	list-style-type: none;
 	text-align: center;
 	padding: 0px;
 }
 
-.topBar li {
+.navBar li {
 	display: inline-flex;
 }
 
-.topBar a {
+.navBar a {
 	text-decoration: none;
 	padding-right: 10vmax;
 	padding-left: 10vmax;
@@ -86,22 +85,40 @@ td{
 }
 
 .userPageName {
-    text-align: left;
-    position: relative;
-    left: 2vmax;
+	text-align: left;
+	position: relative;
+	left: 2vmax;
 }
 
 .userImagePlaceholder {
-    height: 10vmax;
-    width: 10vmax;
-    border-radius: 5vmax;
-    background-color: #6298c7;
-    position: relative;
-    top: 2vmax;
-    left: 2vmax;
+	height: 10vmax;
+	width: 10vmax;
+	border-radius: 5vmax;
+	background-color: #6298c7;
+	position: relative;
+	top: 2vmax;
+	left: 2vmax;
 }
 
 .upload {
-    text-align: center;
-    padding: 4vmax;
+	text-align: center;
+	padding: 4vmax;
+}
+
+.optionsPannel li{
+	list-style-type: none;
+	display: inline;
+}
+
+.siteName a{
+	float: left;
+	text-decoration: none;
+} 
+
+.optionsPanel a{
+	float: right;
+	text-decoration: none;
+}
+
+.topBar {
 }
