@@ -28,18 +28,16 @@ div(class='innerWindow dragMe' style='display: none;')
 
 script(type='text/javascript').
 	$('#saveButton').click(function(){
-		var nameVal = $('.userDetailsClass')[0].value;
-		var passwordVal = $('.userDetailsClass')[1].value;
-		alert(nameVal);
-		alert(passwordVal);
+	var nameVal = $('.userDetailsClass')[0].value;
+	var passwordVal = $('.userDetailsClass')[1].value;
 
-	  $.get('/ajaxGETpassword',
-	  {
-	    Name: nameVal,
-	    Password: passwordVal
-	  },
-	  function(data, status){
-	    alert('Data: ' + data + '\nStatus: ' + status);
-	  });
-
+	$.get('/ajaxGETpassword',
+	{
+		Name: nameVal,
+		Password: passwordVal
+	},
+	function(data, status){
+		alert('Data: ' + data + '\nStatus: ' + status);
+	});
+	
 	});

@@ -113,7 +113,13 @@ app.post('/submit-form', (req, res) => {
 	new formidable.IncomingForm().parse(req)
 	.on('fileBegin', (name, file) => {
 		file.path = __dirname + '/uploads/' + file.name
-		var sqlQuery = 'INSERT INTO user_upload (file_name, file_path, user_id) VALUES ("/uploads/' + file.name+'", "'+file.name+'", "1000")';
+
+		var sqlQuery = '\
+		INSERT INTO user_upload \
+		(file_name, file_path, user_id) \
+		VALUES ("/uploads/' + file.name+'", "'+file.name+'", "1000")\
+		';
+
 		connection.query(sqlQuery, function(err, rows, fields){
 			if(err){
 				throw err;
@@ -130,8 +136,22 @@ app.post('/submit-form', (req, res) => {
 
 
 app.get('/ajaxGETpassword', function(req, res){
-	console.log('name: '+ req.body.Name);
-	console.log('p: '+ req.body.Password);
+	console.log('name: '+ req.query.Name);
+	console.log('p: '+ req.query.Password);
+
+	var sqlQuery = 'SELECT user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
+	connection.query(sqlQuery, function(err, rows, fields){
+			if(err){
+				throw err;
+			}else{
+				if(rows[0].user_password == req.query.Password){
+					console.log('log in Successful');
+				}
+				else{
+					console.log('incorrect password!');
+				}
+			}
+		});
 });
 
 

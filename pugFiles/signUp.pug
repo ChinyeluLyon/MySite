@@ -21,14 +21,14 @@ div(class='upload')
 	include fileUpload.pug
 
 div(class='inputFields')
-	input#UserNameID.userDetailsClass(name='input1' type='text' placeholder='Name')
+	input(id='UserNameID' class='userDetailsClass' name='input1' type='text' placeholder='Name')
 	br
-	input#UserAgeID.userDetailsClass(name='input2' type='text' placeholder='Age')
+	input(id='UserAgeID' class='userDetailsClass' name='input2' type='text' placeholder='Age')
 	br
-	input#UserGenderID.userDetailsClass(name='input3' type='text' placeholder='Gender')
-	br	
-	input#UserPasswordID.userDetailsClass(name='input4' type='text' placeholder='Password')
-
+	input(id='UserGenderID' class='userDetailsClass' name='input3' type='text' placeholder='Gender')
+	br
+	input(id='UserPasswordID' class='userDetailsClass' name='input4' type='text' placeholder='Password')
+	br
 	a(id='saveButton' href='/users') Save
 
 
