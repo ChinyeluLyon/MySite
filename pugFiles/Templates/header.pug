@@ -1,8 +1,11 @@
 doctype html
 
+
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
 
 link(href="https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap" rel="stylesheet")
+link(rel="stylesheet" type="text/css" href="../slick/slick.css")
+link(rel="stylesheet" type="text/css" href="../slick/slick-theme.css")
 
 style
 	include ../../stylesheet.css
@@ -13,6 +16,7 @@ div(class='topBar')
 	
 	div(class='optionsPanel')
 		a(href="/signUp") Sign Up
+		a(href="/logIn") Log In
 			
 	div(class='navBar')
 		h1 #{pageName} 
@@ -22,8 +26,5 @@ div(class='topBar')
 				a(href="/") Home
 			li
 				a(href="/users") Users
-
-
-if {pageName}
-	h1 #{pageName} 
-	
+			li
+				a(href="/gallery") Gallery

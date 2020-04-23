@@ -3,6 +3,10 @@ doctype html
 html
 	include Templates/header.pug
 
+
+
+- 	if(usersArr.length > 0) {
+
 table(align='center')
 	tr
 		th User ID
@@ -18,4 +22,10 @@ table(align='center')
 			td= val.user_gender
 			td(class='editColumn') 
 				a(href='/users/'+val.user_id) editIcon
+		
+
+- } else{ 
+h2 no users
+- }
+
 

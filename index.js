@@ -12,6 +12,7 @@ app.set('views', path.join(__dirname, '/pugFiles'));
 app.use(express.urlencoded({ extended: true }));
 app.use("/javaScript", express.static(path.join(__dirname, "/javaScript")));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/slick")));
 
 //Connect to my database
 var connection = mysql.createConnection({
@@ -69,6 +70,23 @@ app.route('/users/:ID').get(function(req,res)
 			res.render('home');
 		}
 	});
+});
+
+
+app.route("/gallery").get(function(req,res)
+{
+	var sqlQuery = 'SELECT * FROM users';
+	connection.query(sqlQuery, function (err, rows, fields) {
+		if (err) {
+			throw err;
+			console.log('The solution is: ', rows[0].solution);
+		}
+		else{
+			res.render('gallery', {pageName: 'Gallery'});
+			console.log('Gallery Opened');
+		}
+	});
+
 });
 
 app.route('/signUp').get(function(req, res){
