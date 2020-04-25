@@ -157,19 +157,21 @@ app.get('/ajaxGETpassword', function(req, res){
 	console.log('name: '+ req.query.Name);
 	console.log('p: '+ req.query.Password);
 
-	var sqlQuery = 'SELECT user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
+	var sqlQuery = 'SELECT user_name, user_age, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
 	connection.query(sqlQuery, function(err, rows, fields){
-			if(err){
-				throw err;
-			}else{
-				if(rows[0].user_password == req.query.Password){
-					console.log('log in Successful');
-				}
-				else{
-					console.log('incorrect password!');
-				}
+		if(err){
+			throw err;
+		}else{
+			if(rows[0].user_password == req.query.Password){
+				console.log('log in Successful');
+				res.send({id: rows[0].user_id});
+				console.log('sent');
 			}
-		});
+			else{
+				console.log('incorrect password!');
+			}
+		}
+	});
 });
 
 

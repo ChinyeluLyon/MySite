@@ -13,31 +13,29 @@ style
 html
 	include Templates/header.pug
 
-h1: #{pageName}
-
 
 div(class='inputFields')
 	input#UserNameID.userDetailsClass(name='input1' type='text' placeholder='Name')
 	br
 	input#UserGenderID.userDetailsClass(name='input4' type='text' placeholder='Password')
 	br
-	a(id='saveButton' href='/users') Log In
+	button(id='saveButton') Log In
 
 div(class='innerWindow dragMe' style='display: none;')
 	iframe(src='/users' width='50%' height='20%')
 
 script(type='text/javascript').
 	$('#saveButton').click(function(){
-	var nameVal = $('.userDetailsClass')[0].value;
-	var passwordVal = $('.userDetailsClass')[1].value;
+		var nameVal = $('.userDetailsClass')[0].value;
+		var passwordVal = $('.userDetailsClass')[1].value;
 
-	$.get('/ajaxGETpassword',
-	{
-		Name: nameVal,
-		Password: passwordVal
-	},
-	function(data, status){
-		alert('Data: ' + data + '\nStatus: ' + status);
+		$.get('/ajaxGETpassword',
+		{
+			Name: nameVal,
+			Password: passwordVal
+		},
+		function(data, status){
+			window.location.replace('/users/'+data.id)
+		});
 	});
-	
-	});
+
