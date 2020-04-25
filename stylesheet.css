@@ -126,9 +126,13 @@ td{
 }
 
 .slick-slide {
-    height: 35vmax;
+	height: 35vmax;
+}
+.carousel {
+	width: 90vmax !important;
+	margin: auto;
 }
 
-slick-dotted.slick-slider {
-    width: 90vmax;
+.slick-next:before, .slick-prev:before{
+	color: black;
 }
