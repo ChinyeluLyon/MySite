@@ -5,9 +5,11 @@ html
 
 a hi
 
-div(class='autoplay' style="height:100px;")
-	img(src='../uploads/Stevie-e1387477195621.png' height='500' width='500')
-	img(src='../uploads/untitled.png' height='500' width='500')
+div(class='carousel')
+	img(src='../uploads/Stevie-e1387477195621.png')
+	img(src='../uploads/untitled.png')
+	img(src='../uploads/Stevie-e1387477195621.png')
+	img(src='../uploads/untitled.png')
 
 
 script(type='text/javascript' src="//code.jquery.com/jquery-1.11.0.min.js")
@@ -16,15 +18,15 @@ script(type='text/javascript' src="slick/slick.min.js")
 
 script(type='text/javascript').
 	$(document).ready(function(){
-		$('.autoplay').slick({
+		$('.carousel').slick({
 			dots: true,
 			infinite: true,
-			infinite: true,
-			slidesToShow: 3,
-			slidesToScroll: 3,
-			speed: 500,
-			fade: true,
-			cssEase: 'linear'
+			speed: 300,
+			slidesToShow: 1,
+			centerMode: true,
+			variableWidth: true,
+			autoplay: true,
+			autoplaySpeed: 4000
 		});
 	});
 

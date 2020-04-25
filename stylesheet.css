@@ -1,6 +1,11 @@
 h1, h2, h3, a{
 	font-family: 'Sen', sans-serif;
 }
+
+body{
+	background-color: #fffbd5;
+}
+
 .navBar h1, .navBar h2{
 	text-align: center;
 }
@@ -120,5 +125,10 @@ td{
 	text-decoration: none;
 }
 
-.topBar {
+.slick-slide {
+    height: 35vmax;
+}
+
+slick-dotted.slick-slider {
+    width: 90vmax;
 }
