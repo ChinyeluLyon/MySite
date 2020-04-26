@@ -6,6 +6,35 @@ body{
 	background-color: #fffbd5;
 }
 
+.topBar{
+	background-color: dodgerblue;
+	position: relative;
+	top: -22px;
+	width: 100vmax;
+}
+
+#homePageTitle {
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	font-size: 17vmax;
+	display: none;
+}
+#homePageImage{
+	display:none; 
+	width:96vmax;
+}
+
+.homeButtons {
+	display: none;
+	position: relative;
+	text-align: center;
+	padding: 3vmax;
+	text-decoration: none;
+    top: 57vmax;
+	border: solid 4px black;
+}
+
 .navBar h1, .navBar h2{
 	text-align: center;
 }
@@ -136,3 +165,4 @@ td{
 .slick-next:before, .slick-prev:before{
 	color: black;
 }
+

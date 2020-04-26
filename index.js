@@ -43,7 +43,6 @@ app.route("/users").get(function(req,res)
 			console.log('Query Successful!');
 		}
 	});
-
 });
 
 

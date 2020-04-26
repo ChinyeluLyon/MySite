@@ -7,13 +7,25 @@ link(href='https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap' r
 script(type='text/javascript').
 	draggable('.dragMe');
 
-style
-	include ../stylesheet.css
 
 html
 	include Templates/header.pug
 
+div
+	h1(id="homePageTitle") CHINYELU
 
-p welcome to my site...
-p please come on in
+	div
+		h2(class='homeButtons' id="homeButtonsOne" href="/users" style="backdrop-filter: blur(10px);") Users
+		h2(class='homeButtons' id="homeButtonsTwo" href="/gallery" style="backdrop-filter: blur(10px);") Gallery
 
+	img(id='homePageImage' src='../uploads/me.png')
+
+
+script(type="text/javascript").
+	$('#homePageImage').fadeIn(1000, function(){
+		$('#homePageTitle').fadeIn(3000, function(){
+			$('#homeButtonsOne').fadeIn(1000, function(){
+				$('#homeButtonsTwo').fadeIn(1000);
+			});
+		});
+	});
