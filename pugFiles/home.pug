@@ -14,14 +14,18 @@ html
 div
 	h1(id="homePageTitle") CHINYELU
 
-	div
-		h2(class='homeButtons' id="homeButtonsOne" href="/users" style="backdrop-filter: blur(10px);") Users
-		h2(class='homeButtons' id="homeButtonsTwo" href="/gallery" style="backdrop-filter: blur(10px);") Gallery
+
+	a(href="/users") 
+		h2(class='homeButtons' id="homeButtonsOne") Users
+	a(href="/gallery") 
+		h2(class='homeButtons' id="homeButtonsTwo") Gallery
 
 	img(id='homePageImage' src='../uploads/me.png')
 
 
 script(type="text/javascript").
+	debugger;
+	$('.topbar').css('display', 'none');
 	$('#homePageImage').fadeIn(1000, function(){
 		$('#homePageTitle').fadeIn(3000, function(){
 			$('#homeButtonsOne').fadeIn(1000, function(){

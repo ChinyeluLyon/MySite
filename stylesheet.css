@@ -27,12 +27,24 @@ body{
 
 .homeButtons {
 	display: none;
-	position: relative;
+	position: absolute;
 	text-align: center;
 	padding: 3vmax;
 	text-decoration: none;
     top: 57vmax;
 	border: solid 4px black;
+	backdrop-filter: blur(10px);
+}
+
+#homeButtonsOne {
+    left: 14vmax;
+    top: 42vmax;
+    right: 14vmax;
+}
+#homeButtonsTwo {
+    right: 14vmax;
+    left: 14vmax;
+    top: 55vmax;
 }
 
 .navBar h1, .navBar h2{
@@ -166,3 +178,6 @@ td{
 	color: black;
 }
 
+.randomFilmImageWrapper{
+	text-align: center;
+}

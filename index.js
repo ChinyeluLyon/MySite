@@ -4,7 +4,10 @@ const app = express();
 const mysql = require('mysql');
 const pug = require('pug');
 const path = require('path');
-const formidable = require('formidable')
+const formidable = require('formidable');
+const request = require('request');
+
+const ApiKeyTMDB = '8b3e4cee4754a035bb9ad2a02fd1e7f3';
 
 //set up template engine
 app.set('view engine', 'pug');
@@ -43,6 +46,7 @@ app.route("/users").get(function(req,res)
 			console.log('Query Successful!');
 		}
 	});
+
 });
 
 
@@ -96,6 +100,39 @@ app.route('/logIn').get(function(req, res){
 	res.render('logIn', {pageName: 'Log In'});
 });
 
+app.route('/randomFilm').get(function(req, res){
+
+	function TMDBApiCall(apiUrl,callback){
+		request(apiUrl, { json: true }, (err, res, body) => {
+			if (err) { return console.log(err); }
+			return callback(body);
+		});
+	};
+	var apiUrl = 'https://api.themoviedb.org/3/movie/latest?api_key='+ApiKeyTMDB+'&language=en-US';
+	TMDBApiCall(apiUrl, function(response){
+		console.log('currentMaxFilmId: '+response.id);
+		var randomFilmId = Math.floor((Math.random() * response.id) + 0);
+		console.log('randomFilmId: '+randomFilmId);
+		console.log('https://api.themoviedb.org/3/movie/'+randomFilmId+'?api_key='+ApiKeyTMDB+'&language=en-US&language=en-US');
+
+		TMDBApiCall('https://api.themoviedb.org/3/movie/'+randomFilmId+'?api_key='+ApiKeyTMDB+'&language=en-US&language=en-US', function(response){
+			//all film information
+			console.log('Title: '+response.original_title);
+			if(response.original_title && response.overview && response.poster_path){
+				res.render('randomFilm', {
+					pageName: 'Random Films', 
+					filmTitle: response.original_title,
+					description: response.overview,
+					posterUrl: 'http://image.tmdb.org/t/p/w300'+response.poster_path
+				});
+			}
+		});
+	});
+
+
+
+
+});
 
 app.post('/ajaxPOSTusers', function (req, res){  
 	console.log('Name: '+req.body.Name);
@@ -172,6 +209,8 @@ app.get('/ajaxGETpassword', function(req, res){
 		}
 	});
 });
+
+
 
 
 console.log('server running');

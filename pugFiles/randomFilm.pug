@@ -1,0 +1,8 @@
+doctype html
+
+html
+	include Templates/header.pug
+div(class='randomFilmImageWrapper')
+	img(id="randomFilmImage" src=`${posterUrl}`)
+h1 #{filmTitle}
+h2 #{description}
