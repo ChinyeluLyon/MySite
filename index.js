@@ -18,6 +18,7 @@ app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/slick")));
 
 //Connect to my database
+/*
 var connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
@@ -25,6 +26,15 @@ var connection = mysql.createConnection({
 	database: 'testdb'
 });
 connection.connect();
+*/
+var connection = mysql.createConnection({
+	host: 'eu-cdbr-west-03.cleardb.net/',
+	user: 'bcc861a75b94d1',
+	password: '7a2672e3'
+});
+connection.connect(function(){
+	console.log('clearDB connection Successful!')
+});
 
 //home page
 app.route("/").get(function(req,res)
@@ -89,7 +99,6 @@ app.route("/gallery").get(function(req,res)
 			console.log('Gallery Opened');
 		}
 	});
-
 });
 
 app.route('/signUp').get(function(req, res){
