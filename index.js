@@ -214,4 +214,4 @@ app.get('/ajaxGETpassword', function(req, res){
 
 
 console.log('server running');
-var server = app.listen(8080,function() {});
+//var server = app.listen(8080,function() {});
