@@ -144,13 +144,14 @@ app.route('/randomFilm').get(function(req, res){
 			//all film information
 			console.log('Title: '+response.original_title);
 			if(response.original_title && response.overview && response.poster_path){
-				res.render('randomFilm', {
-					pageName: 'Random Films', 
-					filmTitle: response.original_title,
-					description: response.overview,
-					posterUrl: 'http://image.tmdb.org/t/p/w300'+response.poster_path
-				});
+				console.log('has title, description and poster');
 			}
+			res.render('randomFilm', {
+				pageName: 'Random Films', 
+				filmTitle: response.original_title,
+				description: response.overview,
+				posterUrl: 'http://image.tmdb.org/t/p/w300'+response.poster_path
+			});
 		});
 	});
 
