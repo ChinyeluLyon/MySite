@@ -30,7 +30,8 @@ connection.connect();
 var connection = mysql.createConnection({
 	host: 'eu-cdbr-west-03.cleardb.net/',
 	user: 'bcc861a75b94d1',
-	password: '7a2672e3'
+	password: '7a2672e3',
+	database: 'heroku_b301eebc16a43c7'
 });
 connection.connect(function(){
 	console.log('clearDB connection Successful!')
@@ -221,7 +222,7 @@ app.get('/ajaxGETpassword', function(req, res){
 });
 
 app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+	console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
 
