@@ -33,9 +33,7 @@ var connection = mysql.createConnection({
 	password: '7a2672e3',
 	database: 'heroku_b301eebc16a43c7'
 });
-connection.connect(function(){
-	console.log('clearDB connection Successful!')
-});
+connection.connect();
 
 //home page
 app.route("/").get(function(req,res)
