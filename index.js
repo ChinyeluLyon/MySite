@@ -46,7 +46,7 @@ app.route("/").get(function(req,res)
 //users page
 app.route("/users").get(function(req,res)
 {
-	var sqlQuery = 'SELECT * FROM users';
+	var sqlQuery = 'SELECT * FROM `heroku_b301eebc16a43c7`.users';
 	connection.query(sqlQuery, function (err, rows, fields) {
 		if (err) {
 			throw err;
@@ -64,7 +64,7 @@ app.route("/users").get(function(req,res)
 //this is a new webpage, should show specific user
 app.route('/users/:ID').get(function(req,res)
 {
-	var sqlQuery = 'SELECT * FROM users WHERE user_id = ?';
+	var sqlQuery = 'SELECT * FROM `heroku_b301eebc16a43c7`.users WHERE user_id = ?';
 	connection.query(sqlQuery, [req.params.ID], function (err, rows, fields) {
 		if (err) {
 			throw err;
@@ -88,22 +88,7 @@ app.route('/users/:ID').get(function(req,res)
 
 app.route("/gallery").get(function(req,res)
 {
-	var sqlQuery = 'SHOW TABLES';
-	connection.query(sqlQuery, function (err, rows, fields) {
-		if (err) {
-			throw err;
-			console.log('The solution is: ', rows[0].solution);
-		}
-		else{
-			//res.render('gallery', {pageName: 'Gallery'});
-			console.log('GALLERY => SHOW TABLES :'+rows);
-		}
-	});
-});
-/*
-app.route("/gallery").get(function(req,res)
-{
-	var sqlQuery = 'SELECT * FROM users';
+	var sqlQuery = 'SELECT * FROM `heroku_b301eebc16a43c7`.users';
 	connection.query(sqlQuery, function (err, rows, fields) {
 		if (err) {
 			throw err;
@@ -115,7 +100,7 @@ app.route("/gallery").get(function(req,res)
 		}
 	});
 
-});*/
+});
 
 app.route('/signUp').get(function(req, res){
 	res.render('signUp', {pageName: 'Sign Up'});
@@ -173,7 +158,7 @@ app.post('/ajaxPOSTusers', function (req, res){
 	else{
 		var sqlQuery = '\
 		INSERT INTO \
-		users (user_name, user_age, user_gender, user_password) \
+		`heroku_b301eebc16a43c7`.users (user_name, user_age, user_gender, user_password) \
 		VALUES ("'+req.body.Name+'", '+req.body.Age+', "'+req.body.Gender+'", "'+req.body.Password+'");\
 		';
 		connection.query(sqlQuery, function (err, rows, fields) {
@@ -195,7 +180,7 @@ app.post('/submit-form', (req, res) => {
 		file.path = __dirname + '/uploads/' + file.name
 
 		var sqlQuery = '\
-		INSERT INTO user_upload \
+		INSERT INTO `heroku_b301eebc16a43c7`.user_upload \
 		(file_name, file_path, user_id) \
 		VALUES ("/uploads/' + file.name+'", "'+file.name+'", "1000")\
 		';
@@ -219,7 +204,7 @@ app.get('/ajaxGETpassword', function(req, res){
 	console.log('name: '+ req.query.Name);
 	console.log('p: '+ req.query.Password);
 
-	var sqlQuery = 'SELECT user_name, user_age, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
+	var sqlQuery = 'SELECT user_name, user_age, user_gender, user_id, user_password FROM `heroku_b301eebc16a43c7`.users WHERE user_name = "'+ req.query.Name +'"';
 	connection.query(sqlQuery, function(err, rows, fields){
 		if(err){
 			throw err;
