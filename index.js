@@ -86,7 +86,21 @@ app.route('/users/:ID').get(function(req,res)
 	});
 });
 
-
+app.route("/gallery").get(function(req,res)
+{
+	var sqlQuery = 'SHOW TABLES';
+	connection.query(sqlQuery, function (err, rows, fields) {
+		if (err) {
+			throw err;
+			console.log('The solution is: ', rows[0].solution);
+		}
+		else{
+			//res.render('gallery', {pageName: 'Gallery'});
+			console.log('GALLERY => SHOW TABLES :'+rows);
+		}
+	});
+});
+/*
 app.route("/gallery").get(function(req,res)
 {
 	var sqlQuery = 'SELECT * FROM users';
@@ -101,7 +115,7 @@ app.route("/gallery").get(function(req,res)
 		}
 	});
 
-});
+});*/
 
 app.route('/signUp').get(function(req, res){
 	res.render('signUp', {pageName: 'Sign Up'});
