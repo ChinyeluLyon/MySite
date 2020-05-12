@@ -58,7 +58,6 @@ app.route("/users").get(function(req,res)
 
 });
 
-
 //this is a new webpage, should show specific user
 app.route('/users/:ID').get(function(req,res)
 {
@@ -155,7 +154,7 @@ app.post('/ajaxPOSTusers', function (req, res){
 	}
 	else{
 		var sqlQuery = '\
-		INSERT INTO \
+		INSERT IGNORE INTO \
 		users (user_name, user_age, user_gender, user_password) \
 		VALUES ("'+req.body.Name+'", '+req.body.Age+', "'+req.body.Gender+'", "'+req.body.Password+'");\
 		';
@@ -178,7 +177,7 @@ app.post('/submit-form', (req, res) => {
 		file.path = __dirname + '/uploads/' + file.name
 
 		var sqlQuery = '\
-		INSERT INTO user_upload \
+		INSERT IGNORE INTO user_upload \
 		(file_name, file_path, user_id) \
 		VALUES ("/uploads/' + file.name+'", "'+file.name+'", "1000")\
 		';
