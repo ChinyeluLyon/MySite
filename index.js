@@ -136,10 +136,11 @@ app.route('/randomFilm').get(function(req, res){
 			});
 		});
 	});
+});
 
 
-
-
+app.route('/virtualMe').get(function(req, res){
+	res.render('virtualMe', {pageName: 'Virtual Me'});
 });
 
 app.post('/ajaxPOSTusers', function (req, res){  
