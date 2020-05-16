@@ -6,8 +6,66 @@ const pug = require('pug');
 const path = require('path');
 const formidable = require('formidable');
 const request = require('request');
+const jwt = require("jsonwebtoken");
+
+//making client secret for my JSON Web Token (JWT) to store in .env File
+/*
+//const myJWTToken = require('crypto').randomBytes(64).toString('hex');
+const myJWTToken = require("crypto")
+	.createHash("sha256")
+	.update("userID")
+	.digest("hex");
+
+console.log('||'+myJWTToken+'||');
+*/
+const dotenv = require('dotenv');
+dotenv.config();
+const secret = process.env.TOKEN_SECRET;
+
+//signing tokens
+function generateAccessToken(username) {
+	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+}
+
+
+//authenticating tokens
+function authenticateToken(req, res, next) {
+	console.log('authenticating...');
+	// Gather the jwt access token from the request header
+	const authHeader = req.query.JWTtoken;
+	const token = authHeader && authHeader.split('=')[1];
+	
+	if (!token){
+		return res.sendStatus(401);
+	} 
+
+	jwt.verify(token, secret, function(err, decoded) {
+		console.log('err: '+err);
+		console.log('username: '+decoded.username);
+		console.log('iat (issued at time)(UNIX time): '+decoded.iat);
+		console.log('expired: '+decoded.expired);
+		next();
+	});
+}
+
+
+
+
 
 const ApiKeyTMDB = '8b3e4cee4754a035bb9ad2a02fd1e7f3';
+
+//simple-oauth2
+const credentials = {
+	client: {
+		id: '22BQRF',
+		secret: 'eaf4e976d0d88f3f7d9e8f8813bf151b'
+	},
+	auth: {
+		tokenHost: 'https://api.fitbit.com/oauth2/token'
+	}
+};
+const oauth2 = require('simple-oauth2').create(credentials);
+console.log('DUNNO: '+oauth2);
 
 //set up template engine
 app.set('view engine', 'pug');
@@ -33,7 +91,26 @@ var connection = mysql.createConnection({
 	password: '7a2672e3',
 	database: 'heroku_b301eebc16a43c7'
 });
+
+function handleDisconnect(conn) {
+  conn.on('error', function(err) {
+    if (!err.fatal) {
+      return;
+    }
+
+    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+      throw err;
+    }
+
+    console.log('Re-connecting lost connection: ' + err.stack);
+
+    connection = mysql.createConnection(conn.config);
+    handleDisconnect(connection);
+    connection.connect();
+  });
+}
 connection.connect();
+handleDisconnect(connection);
 
 //home page
 app.route("/").get(function(req,res)
@@ -148,7 +225,11 @@ app.post('/ajaxPOSTusers', function (req, res){
 	console.log('Age: '+req.body.Age);
 	console.log('Gender: '+req.body.Gender);
 	console.log('Password: '+req.body.Password);
-	console.log('req received');
+	//console.log('req received');
+
+	const token = generateAccessToken({ username: req.body.Name });
+	console.log('token: '+ token);
+	res.json(token);
 
 	if(!req.body.Name || !req.body.Age || !req.body.Gender){
 		console.log('Must fill all user fields!!');
@@ -172,35 +253,11 @@ app.post('/ajaxPOSTusers', function (req, res){
 	}
 });
 
-app.post('/submit-form', (req, res) => {
-	new formidable.IncomingForm().parse(req)
-	.on('fileBegin', (name, file) => {
-		file.path = __dirname + '/uploads/' + file.name
 
-		var sqlQuery = '\
-		INSERT IGNORE INTO user_upload \
-		(file_name, file_path, user_id) \
-		VALUES ("/uploads/' + file.name+'", "'+file.name+'", "1000")\
-		';
-
-		connection.query(sqlQuery, function(err, rows, fields){
-			if(err){
-				throw err;
-			}else{
-				console.log("file data saved to user_file TABLE")
-			}
-		});
-	})
-	.on('file', (name, file) => {
-		console.log('Uploaded file', name, file)
-	})
-
-})
-
-
-app.get('/ajaxGETpassword', function(req, res){
+app.get('/ajaxGETpassword', authenticateToken, function(req, res){
 	console.log('name: '+ req.query.Name);
 	console.log('p: '+ req.query.Password);
+	console.log('JWT: '+ req.query.JWTtoken);
 
 	var sqlQuery = 'SELECT user_name, user_age, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
 	connection.query(sqlQuery, function(err, rows, fields){
@@ -219,10 +276,12 @@ app.get('/ajaxGETpassword', function(req, res){
 	});
 });
 
-app.listen(process.env.PORT || 3000, function(){
+
+
+
+app.listen(process.env.PORT || 80, function(){
 	console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
-
 
 console.log('server running');
 //var server = app.listen(8080,function() {});

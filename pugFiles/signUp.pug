@@ -41,15 +41,16 @@ script(type='text/javascript').
 		var genderVal = $('.userDetailsClass')[2].value;
 		var passwordVal = $('.userDetailsClass')[3].value;
 
-	  $.post('/ajaxPOSTusers',
-	  {
-	    Name: nameVal,
-	    Age: ageVal,
-	    Gender: genderVal,
-	    Password: passwordVal
-	  },
-	  function(data, status){
-	    alert('Data: ' + data + '\nStatus: ' + status);
-	  });
+		$.post('/ajaxPOSTusers',
+		{
+			Name: nameVal,
+			Age: ageVal,
+			Gender: genderVal,
+			Password: passwordVal
+		},
+		function(data, status){
+			alert('Data: ' + data + '\nStatus: ' + status);
+			document.cookie = 'token='+data;
 
+		});
 	});

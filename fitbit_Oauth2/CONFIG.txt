@@ -1,0 +1,15 @@
+OAuth 2.0 Client ID
+22BQRF
+
+Client Secret
+eaf4e976d0d88f3f7d9e8f8813bf151b
+
+Callback URL
+https://chinyelu.herokuapp.com/virtualMe
+
+OAuth 2.0: Authorization URI
+https://www.fitbit.com/oauth2/authorize
+
+OAuth 2.0: Access/Refresh Token Request URI
+https://api.fitbit.com/oauth2/token
+

@@ -32,7 +32,8 @@ script(type='text/javascript').
 		$.get('/ajaxGETpassword',
 		{
 			Name: nameVal,
-			Password: passwordVal
+			Password: passwordVal,
+			JWTtoken: document.cookie 
 		},
 		function(data, status){
 			window.location.replace('/users/'+data.id)
