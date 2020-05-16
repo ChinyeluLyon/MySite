@@ -93,21 +93,21 @@ var connection = mysql.createConnection({
 });
 
 function handleDisconnect(conn) {
-  conn.on('error', function(err) {
-    if (!err.fatal) {
-      return;
-    }
+	conn.on('error', function(err) {
+		if (!err.fatal) {
+			return;
+		}
 
-    if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-      throw err;
-    }
+		if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+			throw err;
+		}
 
-    console.log('Re-connecting lost connection: ' + err.stack);
+		console.log('Re-connecting lost connection: ' + err.stack);
 
-    connection = mysql.createConnection(conn.config);
-    handleDisconnect(connection);
-    connection.connect();
-  });
+		connection = mysql.createConnection(conn.config);
+		handleDisconnect(connection);
+		connection.connect();
+	});
 }
 connection.connect();
 handleDisconnect(connection);
@@ -220,16 +220,17 @@ app.route('/virtualMe').get(function(req, res){
 	res.render('virtualMe', {pageName: 'Virtual Me'});
 });
 
-app.post('/ajaxPOSTusers', function (req, res){  
-	console.log('Name: '+req.body.Name);
-	console.log('Age: '+req.body.Age);
-	console.log('Gender: '+req.body.Gender);
-	console.log('Password: '+req.body.Password);
+app.post('/ajaxSignUp', function (req, res){  
+	//console.log('Name: '+req.body.Name);
+	//console.log('Age: '+req.body.Age);
+	//console.log('Gender: '+req.body.Gender);
+	//console.log('Password: '+req.body.Password);
 	//console.log('req received');
 
 	const token = generateAccessToken({ username: req.body.Name });
 	console.log('token: '+ token);
 	res.json(token);
+
 
 	if(!req.body.Name || !req.body.Age || !req.body.Gender){
 		console.log('Must fill all user fields!!');
@@ -237,8 +238,8 @@ app.post('/ajaxPOSTusers', function (req, res){
 	else{
 		var sqlQuery = '\
 		INSERT IGNORE INTO \
-		users (user_name, user_age, user_gender, user_password) \
-		VALUES ("'+req.body.Name+'", '+req.body.Age+', "'+req.body.Gender+'", "'+req.body.Password+'");\
+		users (user_name, user_age, user_gender, user_password, login_token) \
+		VALUES ("'+req.body.Name+'", '+req.body.Age+', "'+req.body.Gender+'", "'+req.body.Password+'", "'+token+'");\
 		';
 		connection.query(sqlQuery, function (err, rows, fields) {
 			if (err) {
@@ -247,14 +248,13 @@ app.post('/ajaxPOSTusers', function (req, res){
 			}
 			else
 			{
-				console.log('Query Successful!');
+				console.log('New User Signed Up Successfully!');
 			}
 		});
 	}
 });
 
-
-app.get('/ajaxGETpassword', authenticateToken, function(req, res){
+app.get('/ajaxLogin', function(req, res){
 	console.log('name: '+ req.query.Name);
 	console.log('p: '+ req.query.Password);
 	console.log('JWT: '+ req.query.JWTtoken);
@@ -268,6 +268,20 @@ app.get('/ajaxGETpassword', authenticateToken, function(req, res){
 				console.log('log in Successful');
 				res.send({id: rows[0].user_id});
 				console.log('sent');
+
+				const token = generateAccessToken({ username: req.body.Name });
+				console.log('token: '+ token);
+				res.json(token);
+
+				connection.query('UPDATE users SET login_token = "'+ token +'" WHERE user_name = '+req.body.Name, function(err, rows, fields){
+					if(err){
+						throw err;
+					}
+					else{
+						console.log(req.query.Name + ' token updated to ' + token);
+					}
+				});
+
 			}
 			else{
 				console.log('incorrect password!');
