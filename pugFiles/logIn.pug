@@ -1,7 +1,5 @@
 doctype html
 
-script(src='../javaScript/draggable.js')
-
 link(href='https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap' rel='stylesheet')
 
 
@@ -19,9 +17,6 @@ div(class='inputFields')
 	br
 	button(id='saveButton') Log In
 
-div(class='innerWindow dragMe' style='display: none;')
-	iframe(src='/myPage' width='50%' height='20%')
-
 script(type='text/javascript').
 	$('#saveButton').click(function(){
 		var nameVal = $('.userDetailsClass')[0].value;
@@ -30,11 +25,12 @@ script(type='text/javascript').
 		$.get('/ajaxLogin',
 		{
 			Name: nameVal,
-			Password: passwordVal,
-			JWTtoken: document.cookie 
+			Password: passwordVal
 		},
 		function(data, status){
-			window.location.replace('/users/'+data.id)
+			document.cookie = 'token='+data.JWT;
+			//window.location.replace('/users/'+data.id);
+			window.location.replace('/user');
 		});
 	});
 

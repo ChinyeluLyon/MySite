@@ -7,6 +7,7 @@ const path = require('path');
 const formidable = require('formidable');
 const request = require('request');
 const jwt = require("jsonwebtoken");
+var cookieParser = require('cookie-parser');
 
 //making client secret for my JSON Web Token (JWT) to store in .env File
 /*
@@ -27,30 +28,27 @@ function generateAccessToken(username) {
 	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
 
-
 //authenticating tokens
 function authenticateToken(req, res, next) {
 	console.log('authenticating...');
 	// Gather the jwt access token from the request header
-	const authHeader = req.query.JWTtoken;
-	const token = authHeader && authHeader.split('=')[1];
+	console.log(req.cookies.token);
+
+	const token = req.cookies.token;
 	
 	if (!token){
 		return res.sendStatus(401);
 	} 
-
+	console.log('SECRET'+secret);
 	jwt.verify(token, secret, function(err, decoded) {
+		console.log('decoded: '+Object.keys(decoded));
 		console.log('err: '+err);
 		console.log('username: '+decoded.username);
 		console.log('iat (issued at time)(UNIX time): '+decoded.iat);
-		console.log('expired: '+decoded.expired);
+		console.log('expired: '+decoded.exp);
 		next();
 	});
 }
-
-
-
-
 
 const ApiKeyTMDB = '8b3e4cee4754a035bb9ad2a02fd1e7f3';
 
@@ -74,6 +72,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/javaScript", express.static(path.join(__dirname, "/javaScript")));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/slick")));
+app.use(cookieParser());
+
 
 //Connect to my database
 /*
@@ -135,32 +135,23 @@ app.route("/users").get(function(req,res)
 
 });
 
-
-//this is a new webpage, should show specific user
-app.route('/myPage').get(function(req,res)
+app.route('/user').get(authenticateToken, function(req,res)
 {
-	var sqlQuery = 'SELECT * FROM users WHERE user_id = ?';
-	connection.query(sqlQuery, [req.params.ID], function (err, rows, fields) {
+	console.log('SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"');
+	var sqlQuery = 'SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"';
+	connection.query(sqlQuery, function (err, rows, fields) {
 		if (err) {
 			throw err;
 			console.log('The solution is: ', rows[0].solution);
 		}
-		else if (rows.length > 0){
+		else{
 			res.render('user', 
 			{
-				Name: rows[0].user_name, 
-				Age: rows[0].user_age, 
-				Gender: rows[0].user_gender,
-				ID: rows[0].user_id 
+				Name: rows[0].user_name
 			});
-			console.log('Query Successful!');
-		}
-		else{
-			res.render('home');
 		}
 	});
 });
-
 
 //this is a new webpage, should show specific user
 app.route('/users/:ID').get(function(req,res)
@@ -283,8 +274,7 @@ app.post('/ajaxSignUp', function (req, res){
 
 app.get('/ajaxLogin', function(req, res){
 	console.log('name: '+ req.query.Name);
-	console.log('p: '+ req.query.Password);
-	console.log('JWT: '+ req.query.JWTtoken);
+	console.log('password: '+ req.query.Password);
 
 	var sqlQuery = 'SELECT user_name, user_age, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
 	connection.query(sqlQuery, function(err, rows, fields){
@@ -293,11 +283,12 @@ app.get('/ajaxLogin', function(req, res){
 		}else{
 			if(rows[0].user_password == req.query.Password){
 
-				const token = generateAccessToken({ username: req.body.Name });
+				const token = generateAccessToken({ username: req.query.Name });
 				console.log('token: '+ token);
 				//res.json(token);
 				var userId = rows[0].user_id;
-				connection.query('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.body.Name+'"', function(err, rows, fields){
+				console.log('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.query.Name+'"');
+				connection.query('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.query.Name+'"', function(err, rows, fields){
 					if(err){
 						throw err;
 					}
@@ -306,7 +297,8 @@ app.get('/ajaxLogin', function(req, res){
 							id: userId,
 							JWT: token
 						});
-						console.log(req.query.Name + ' token updated to ' + token);
+						
+						console.log(req.query.Name + '\'s token was updated to ' + token);
 						console.log('log in Successful');
 					}
 				});
@@ -318,8 +310,6 @@ app.get('/ajaxLogin', function(req, res){
 		}
 	});
 });
-
-
 
 
 app.listen(process.env.PORT || 80, function(){

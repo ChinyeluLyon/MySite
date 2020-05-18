@@ -1,11 +1,6 @@
 doctype html
 
-script(src='../javaScript/draggable.js')
-
 link(href='https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap' rel='stylesheet')
-
-script(type='text/javascript').
-	draggable('.dragMe');
 
 style
 	include ../stylesheet.css
@@ -27,11 +22,7 @@ div(class='inputFields')
 	br
 	input(id='UserPasswordID' class='userDetailsClass' name='input4' type='text' placeholder='Password')
 	br
-	a(id='saveButton' href='/users') Save
-
-
-div(class='innerWindow dragMe' style='display: none;')
-	iframe(src='/myPage' width='50%' height='20%')
+	a(id='saveButton' href='/user') Save
 
 
 script(type='text/javascript').
@@ -51,6 +42,5 @@ script(type='text/javascript').
 		function(data, status){
 			alert('Data: ' + data + '\nStatus: ' + status);
 			document.cookie = 'token='+data;
-
 		});
 	});
