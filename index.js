@@ -135,6 +135,33 @@ app.route("/users").get(function(req,res)
 
 });
 
+
+//this is a new webpage, should show specific user
+app.route('/myPage').get(function(req,res)
+{
+	var sqlQuery = 'SELECT * FROM users WHERE user_id = ?';
+	connection.query(sqlQuery, [req.params.ID], function (err, rows, fields) {
+		if (err) {
+			throw err;
+			console.log('The solution is: ', rows[0].solution);
+		}
+		else if (rows.length > 0){
+			res.render('user', 
+			{
+				Name: rows[0].user_name, 
+				Age: rows[0].user_age, 
+				Gender: rows[0].user_gender,
+				ID: rows[0].user_id 
+			});
+			console.log('Query Successful!');
+		}
+		else{
+			res.render('home');
+		}
+	});
+});
+
+
 //this is a new webpage, should show specific user
 app.route('/users/:ID').get(function(req,res)
 {
@@ -265,20 +292,22 @@ app.get('/ajaxLogin', function(req, res){
 			throw err;
 		}else{
 			if(rows[0].user_password == req.query.Password){
-				console.log('log in Successful');
-				res.send({id: rows[0].user_id});
-				console.log('sent');
 
 				const token = generateAccessToken({ username: req.body.Name });
 				console.log('token: '+ token);
-				res.json(token);
-
-				connection.query('UPDATE users SET login_token = "'+ token +'" WHERE user_name = '+req.body.Name, function(err, rows, fields){
+				//res.json(token);
+				var userId = rows[0].user_id;
+				connection.query('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.body.Name+'"', function(err, rows, fields){
 					if(err){
 						throw err;
 					}
 					else{
+						res.send({
+							id: userId,
+							JWT: token
+						});
 						console.log(req.query.Name + ' token updated to ' + token);
+						console.log('log in Successful');
 					}
 				});
 
