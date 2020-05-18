@@ -28,9 +28,14 @@ script(type='text/javascript').
 			Password: passwordVal
 		},
 		function(data, status){
-			document.cookie = 'token='+data.JWT;
-			//window.location.replace('/users/'+data.id);
-			window.location.replace('/user');
+			if(data.JWT){
+				alert(data.JWT);
+				document.cookie = 'token='+data.JWT;
+				window.location.replace('/user');
+			}
+			else{
+				alert(data.Message);
+			}
 		});
 	});
 

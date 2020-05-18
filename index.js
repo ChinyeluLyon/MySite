@@ -37,7 +37,8 @@ function authenticateToken(req, res, next) {
 	const token = req.cookies.token;
 	
 	if (!token){
-		return res.sendStatus(401);
+		res.render('signUpOrLogIn');
+		//return res.sendStatus(401);
 	} 
 	console.log('SECRET'+secret);
 	jwt.verify(token, secret, function(err, decoded) {
@@ -194,6 +195,11 @@ app.route("/gallery").get(function(req,res)
 
 });
 
+app.route("/signOrlog").get(function(req,res)
+{
+	res.render('signUpOrLogIn');
+});
+
 app.route('/signUp').get(function(req, res){
 	res.render('signUp', {pageName: 'Sign Up'});
 });
@@ -305,6 +311,9 @@ app.get('/ajaxLogin', function(req, res){
 
 			}
 			else{
+				res.send({
+					Message: 'Incorrect username or password, please try again'
+				});
 				console.log('incorrect password!');
 			}
 		}
