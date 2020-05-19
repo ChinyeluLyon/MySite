@@ -40,7 +40,7 @@ function authenticateToken(req, res, next) {
 		res.render('signUpOrLogIn');
 		//return res.sendStatus(401);
 	} 
-	console.log('SECRET'+secret);
+	//console.log('SECRET: '+secret);
 	jwt.verify(token, secret, function(err, decoded) {
 		console.log('decoded: '+Object.keys(decoded));
 		console.log('err: '+err);
@@ -146,9 +146,13 @@ app.route('/user').get(authenticateToken, function(req,res)
 			console.log('The solution is: ', rows[0].solution);
 		}
 		else{
+			var nowDate = new Date();
+			var age = new Date(nowDate - rows[0].user_DOB);
+
 			res.render('user', 
 			{
-				Name: rows[0].user_name
+				Name: rows[0].user_name,
+				Age: age.getUTCFullYear() - 1970
 			});
 		}
 	});
@@ -167,7 +171,7 @@ app.route('/users/:ID').get(function(req,res)
 			res.render('user', 
 			{
 				Name: rows[0].user_name, 
-				Age: rows[0].user_age, 
+				DOB: rows[0].user_DOB, 
 				Gender: rows[0].user_gender,
 				ID: rows[0].user_id 
 			});
@@ -256,14 +260,21 @@ app.post('/ajaxSignUp', function (req, res){
 	res.json(token);
 
 
-	if(!req.body.Name || !req.body.Age || !req.body.Gender){
+	if(!req.body.Name || !req.body.DOB || !req.body.Gender){
 		console.log('Must fill all user fields!!');
 	}
 	else{
+
+		console.log('\
+			INSERT IGNORE INTO \
+			users (user_name, user_DOB, user_gender, user_password, login_token) \
+			VALUES ("'+req.body.Name+'", "'+req.body.DOB+'", "'+req.body.Gender+'", "'+req.body.Password+'", "'+token+'");\
+			');
+
 		var sqlQuery = '\
 		INSERT IGNORE INTO \
-		users (user_name, user_age, user_gender, user_password, login_token) \
-		VALUES ("'+req.body.Name+'", '+req.body.Age+', "'+req.body.Gender+'", "'+req.body.Password+'", "'+token+'");\
+		users (user_name, user_DOB, user_gender, user_password, login_token) \
+		VALUES ("'+req.body.Name+'", "'+req.body.DOB+'", "'+req.body.Gender+'", "'+req.body.Password+'", "'+token+'");\
 		';
 		connection.query(sqlQuery, function (err, rows, fields) {
 			if (err) {
@@ -282,7 +293,7 @@ app.get('/ajaxLogin', function(req, res){
 	console.log('name: '+ req.query.Name);
 	console.log('password: '+ req.query.Password);
 
-	var sqlQuery = 'SELECT user_name, user_age, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
+	var sqlQuery = 'SELECT user_name, user_DOB, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
 	connection.query(sqlQuery, function(err, rows, fields){
 		if(err){
 			throw err;

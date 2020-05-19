@@ -16,11 +16,11 @@ div(class='upload')
 div(class='inputFields')
 	input(id='UserNameID' class='userDetailsClass' name='input1' type='text' placeholder='Name')
 	br
-	input(id='UserAgeID' class='userDetailsClass' name='input2' type='text' placeholder='Age')
+	input(id='UserDOBID' class='userDetailsClass' name='input2' type='date' placeholder='D O B')
 	br
 	input(id='UserGenderID' class='userDetailsClass' name='input3' type='text' placeholder='Gender')
 	br
-	input(id='UserPasswordID' class='userDetailsClass' name='input4' type='text' placeholder='Password')
+	input(id='UserPasswordID' class='userDetailsClass' name='input4' type='password' placeholder='Password')
 	br
 	a(id='saveButton' href='/user') Save
 
@@ -28,14 +28,14 @@ div(class='inputFields')
 script(type='text/javascript').
 	$('#saveButton').click(function(){
 		var nameVal = $('.userDetailsClass')[0].value;
-		var ageVal = $('.userDetailsClass')[1].value;
+		var DOBVal = $('.userDetailsClass')[1].value;
 		var genderVal = $('.userDetailsClass')[2].value;
 		var passwordVal = $('.userDetailsClass')[3].value;
 
 		$.post('/ajaxSignUp',
 		{
 			Name: nameVal,
-			Age: ageVal,
+			DOB: DOBVal,
 			Gender: genderVal,
 			Password: passwordVal
 		},
