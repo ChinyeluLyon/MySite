@@ -25,29 +25,29 @@ const secret = process.env.TOKEN_SECRET;
 
 //signing tokens
 function generateAccessToken(username) {
-	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '30s' });
 }
 
 //authenticating tokens
 function authenticateToken(req, res, next) {
 	console.log('authenticating...');
-	// Gather the jwt access token from the request header
-	console.log(req.cookies.token);
-
 	const token = req.cookies.token;
 	
 	if (!token){
 		res.render('signUpOrLogIn');
-		//return res.sendStatus(401);
 	} 
-	//console.log('SECRET: '+secret);
 	jwt.verify(token, secret, function(err, decoded) {
-		console.log('decoded: '+Object.keys(decoded));
-		console.log('err: '+err);
-		console.log('username: '+decoded.username);
-		console.log('iat (issued at time)(UNIX time): '+decoded.iat);
-		console.log('expired: '+decoded.exp);
-		next();
+		if(decoded){
+			console.log('err: '+err);
+			console.log('username: '+decoded.username);
+			console.log('iat (issued at time)(UNIX time): '+decoded.iat);
+			console.log('expired: '+decoded.exp);
+			next();
+		}
+		else{
+			console.log('not passed');
+			res.render('signUpOrLogIn');
+		}
 	});
 }
 
@@ -293,44 +293,82 @@ app.get('/ajaxLogin', function(req, res){
 	console.log('name: '+ req.query.Name);
 	console.log('password: '+ req.query.Password);
 
-	var sqlQuery = 'SELECT user_name, user_DOB, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
+	var sqlQuery = 'SELECT * FROM users WHERE user_name = "'+ req.query.Name +'"';
 	connection.query(sqlQuery, function(err, rows, fields){
 		if(err){
 			throw err;
 		}else{
-			if(rows[0].user_password == req.query.Password){
+			if(rows.length <= 0){
 
-				const token = generateAccessToken({ username: req.query.Name });
-				console.log('token: '+ token);
-				//res.json(token);
-				var userId = rows[0].user_id;
-				console.log('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.query.Name+'"');
-				connection.query('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.query.Name+'"', function(err, rows, fields){
+				console.log(Object.keys(rows));
+				console.log('wrong username');
+				res.send({
+					Message: 'Incorrect username or password, please try again'
+				});
+			}
+			else{
+				var sqlQuery = 'SELECT user_name, user_DOB, user_gender, user_id, user_password FROM users WHERE user_name = "'+ req.query.Name +'"';
+				connection.query(sqlQuery, function(err, rows, fields){
 					if(err){
 						throw err;
 					}
 					else{
-						res.send({
-							id: userId,
-							JWT: token
-						});
-						
-						console.log(req.query.Name + '\'s token was updated to ' + token);
-						console.log('log in Successful');
+						if(rows[0].user_password == req.query.Password){
+							const token = generateAccessToken({ username: req.query.Name });
+							console.log('token: '+ token);
+
+							var userId = rows[0].user_id;
+							console.log('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.query.Name+'"');
+							connection.query('UPDATE users SET login_token = "'+ token +'" WHERE user_name = "'+req.query.Name+'"', function(err, rows, fields){
+								if(err){
+									throw err;
+								}
+								else{
+									res.send({
+										id: userId,
+										JWT: token
+									});
+
+									console.log(req.query.Name + '\'s token was updated to ' + token);
+									console.log('log in Successful');
+								}
+							});
+
+						}
+						else{
+							res.send({
+								Message: 'Incorrect username or password, please try again'
+							});
+							console.log('incorrect password!');
+						}
 					}
 				});
-
-			}
-			else{
-				res.send({
-					Message: 'Incorrect username or password, please try again'
-				});
-				console.log('incorrect password!');
 			}
 		}
 	});
+
+	
 });
 
+app.get('/ajaxCheckLoggedIn', function(req, res){
+	if(!req.query.currentToken || req.query.currentToken == 'token='){
+		console.log('not logged In');
+	}
+	else{
+		console.log('token: '+ req.query.currentToken);
+		var token = req.query.currentToken.split('=')[1];
+
+		var sqlQuery = 'SELECT user_name, user_DOB, user_gender, user_id, user_password FROM users WHERE login_token = "'+token+'"';
+		connection.query(sqlQuery, function(err, rows, fields){
+			if(err){
+				throw err;
+			}else{
+				res.send({loggedInAs: rows[0].user_name});
+			}
+		});
+	}
+
+});
 
 app.listen(process.env.PORT || 80, function(){
 	console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);

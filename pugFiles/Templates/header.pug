@@ -15,9 +15,10 @@ div(class='topBar')
 		a(href='/') Chinyelu's Site
 	
 	div(class='optionsPanel')
-		a(href="/signUp") Sign Up
-		a /
-		a(href="/logIn") Log In
+		a(class='hideIfLoggedIn' href="/signUp") Sign Up
+		a(class='hideIfLoggedIn') /
+		a(class='hideIfLoggedIn' href="/logIn") Log In
+		a(class='logOutButton showIfloggedIn' style='display: none;' href="/") Log Out
 			
 	div(class='navBar')
 		h1 #{pageName} 
@@ -26,8 +27,26 @@ div(class='topBar')
 			li
 				a(href="/") Home
 			li
-				a(href="/user") Me
+				a(class='showIfloggedIn' style='display: none;' href="/user") Me
 			li
 				a(href="/gallery") Gallery
 			li
 				a(href="/randomFilm") Random Film
+
+script(type='text/javascript').
+	$.get('/ajaxCheckLoggedIn',
+		{
+			currentToken: document.cookie
+		},
+		function(data, status){
+
+			if(data.loggedInAs){
+				console.log('logged in as '+data.loggedInAs);
+				$('.showIfloggedIn').css('display', 'block');
+				$('.hideIfLoggedIn').css('display', 'none');
+			}
+		});
+	$('.logOutButton').click( function(){
+		console.log('token=; expires='+Date()+';');
+		document.cookie = 'token=; expires='+Date()+';';
+	});

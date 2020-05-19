@@ -29,7 +29,7 @@ script(type='text/javascript').
 		},
 		function(data, status){
 			if(data.JWT){
-				alert(data.JWT);
+				//alert(data.JWT);
 				document.cookie = 'token='+data.JWT;
 				window.location.replace('/user');
 			}
