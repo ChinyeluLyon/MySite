@@ -25,7 +25,7 @@ const secret = process.env.TOKEN_SECRET;
 
 //signing tokens
 function generateAccessToken(username) {
-	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '30s' });
+	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
 
 //authenticating tokens
@@ -73,6 +73,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/javaScript", express.static(path.join(__dirname, "/javaScript")));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/slick")));
+app.use("/DataTables", express.static(path.join(__dirname, "/DataTables")));
 app.use(cookieParser());
 
 
@@ -129,7 +130,18 @@ app.route("/users").get(function(req,res)
 			console.log('The solution is: ', rows[0].solution);
 		}
 		else{
-			res.render('allUsers', {pageName: 'All Users', usersArr: rows});
+
+			for(var i=0; i < rows.length; i++){
+				var nowDate = new Date();
+				var dateDiff = new Date(nowDate - rows[i].user_DOB);
+				var age = dateDiff.getUTCFullYear() - 1970;
+				rows[i].user_age = age;
+			}
+
+			res.render('allUsers', {
+				pageName: 'All Users',
+				usersArr: rows
+			});
 			console.log('Query Successful!');
 		}
 	});
@@ -255,21 +267,13 @@ app.post('/ajaxSignUp', function (req, res){
 	//console.log('Password: '+req.body.Password);
 	//console.log('req received');
 
-	const token = generateAccessToken({ username: req.body.Name });
-	console.log('token: '+ token);
-	res.json(token);
-
-
 	if(!req.body.Name || !req.body.DOB || !req.body.Gender){
 		console.log('Must fill all user fields!!');
 	}
 	else{
-
-		console.log('\
-			INSERT IGNORE INTO \
-			users (user_name, user_DOB, user_gender, user_password, login_token) \
-			VALUES ("'+req.body.Name+'", "'+req.body.DOB+'", "'+req.body.Gender+'", "'+req.body.Password+'", "'+token+'");\
-			');
+		const token = generateAccessToken({ username: req.body.Name });
+		console.log('token: '+ token);
+		res.json(token);
 
 		var sqlQuery = '\
 		INSERT IGNORE INTO \

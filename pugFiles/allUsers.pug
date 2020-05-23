@@ -3,29 +3,32 @@ doctype html
 html
 	include Templates/header.pug
 
-
-
 - 	if(usersArr.length > 0) {
 
-table(align='center')
-	tr
-		th User ID
-		th Name
-		th Age
-		th Gender
-		th(class='editColumn')
-	each val in usersArr
+table(id="sortableTable" align='center' class="display")
+	thead
 		tr
-			td= val.user_id
-			td= val.user_name
-			td= val.user_age
-			td= val.user_gender
-			td(class='editColumn') 
-				a(href='/users/'+val.user_id) editIcon
-		
+			th User ID
+			th Name
+			th Age
+			th Gender
+			th(class='editColumn')
+	each val in usersArr
+			tr
+				td= val.user_id
+				td= val.user_name
+				td= val.user_age
+				td= val.user_gender
+				td(class='editColumn') 
+					a(href='/users/'+val.user_id) editIcon
 
 - } else{ 
 h2 no users
 - }
+
+script(type='text/javascript').
+	$(document).ready(function(){
+		$('#sortableTable').DataTable();
+	});
 
 
