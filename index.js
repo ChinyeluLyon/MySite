@@ -294,13 +294,26 @@ app.route('/virtualMe').get(function(req, res){
 	console.log('params: '+req.params);
 	console.log('params: '+req.params.access_token);
 	//console.log('keys: '+Object.keys(req.params));
-	
 });
 
 app.route('/connectFitbitAccount').get(function(req,res){
 	console.log('attempting fitbit connection...');
 	var fitbitAuthURL = 'https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FvirtualMe&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=30'
 	res.redirect(fitbitAuthURL);
+});
+
+app.post('/requestFitbit', function(req, res){
+	//https://chinyelu.herokuapp.com/connectFitbitAccount
+	request({
+		headers: {
+			'Authorization': 'bearer'+req.query.access_token
+		},
+		uri: 'https://api.fitbit.com/1/user/-/profile.json',
+		body: formData,
+		method: 'POST'
+	}, function (err, res, body) {
+		console.log('body: '+body);
+	});
 });
 
 app.post('/ajaxSignUp', function (req, res){  
