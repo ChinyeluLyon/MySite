@@ -304,6 +304,9 @@ app.route('/connectFitbitAccount').get(function(req,res){
 
 app.post('/requestFitbit', function(req, res){
 	//https://chinyelu.herokuapp.com/connectFitbitAccount
+	console.log('*********OOJJJJOOOO*************');
+	console.log(req.query.access_token);
+	console.log('*********OOJJJJOOOO*************');
 	request({
 		headers: {
 			'Authorization': 'bearer'+req.query.access_token
