@@ -5,10 +5,13 @@ html
 
 script(type='text/javascript').
 	var at = window.location.hash; 
-	
+	var indexEq = at.indexOf('=');
+	var indexAmp = at.indexOf('&');
+	console.log(at.slice(indexEq, indexAmp));
+
 	$.post('/requestFitbit',
 	{
-		postData: at
+		postData: at.slice(indexEq, indexAmp)
 	},
 	function(data, status){
 		alert('sent');
