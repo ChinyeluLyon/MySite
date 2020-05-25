@@ -7,7 +7,7 @@ script(type='text/javascript').
 	var at = window.location.hash; 
 	var indexEq = at.indexOf('=');
 	var indexAmp = at.indexOf('&');
-	console.log(at.slice(indexEq, indexAmp));
+	console.log(at.slice(indexEq+1, indexAmp));
 
 	$.post('/requestFitbit',
 	{
