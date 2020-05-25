@@ -304,15 +304,12 @@ app.route('/connectFitbitAccount').get(function(req,res){
 
 app.post('/requestFitbit', function(req, res){
 	//https://chinyelu.herokuapp.com/connectFitbitAccount
-	console.log('*********OOJJJJOOOO*************');
-	console.log(req.body.postData);
-	console.log('*********OOJJJJOOOO*************');
+
 	request({
 		headers: {
 			'Authorization': 'bearer'+req.body.postData
 		},
 		uri: 'https://api.fitbit.com/1/user/-/profile.json',
-		body: formData,
 		method: 'POST'
 	}, function (err, res, body) {
 		console.log('body: '+body);
