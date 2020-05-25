@@ -292,6 +292,7 @@ app.route('/virtualMe').get(function(req, res){
 	})
 	*/
 	console.log('params: '+req.params);
+	console.log('params: '+req.params.access_token);
 	//console.log('keys: '+Object.keys(req.params));
 	
 });
