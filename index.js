@@ -31,13 +31,15 @@ async function runOauth2(res) {
 	};
 	const oauth2 = require('simple-oauth2').create(credentials);
 	const authorizationUri = oauth2.authorizationCode.authorizeURL({
-		redirect_uri: 'https://chinyelu.herokuapp.com/virtualMe'
+		//redirect_uri: 'https://chinyelu.herokuapp.com/virtualMe'
+		redirect_uri: 'https://loaclhost:5000/virtualMe'
 
 	});
 	res.redirect(authorizationUri);
 	const tokenConfig = {
 		code: '298d885039232b4ae3e96b45fccbb7e23e1b1f17',
-		redirect_uri: 'https://chinyelu.herokuapp.com/virtualMe'
+		//redirect_uri: 'https://chinyelu.herokuapp.com/virtualMe'
+		redirect_uri: 'https://loaclhost:5000/virtualMe'
 
 	};
 	try {
@@ -276,7 +278,7 @@ app.route('/randomFilm').get(function(req, res){
 
 
 app.route('/virtualMe').get(function(req, res){
-	//res.render('virtualMe', {pageName: 'Virtual Me'});
+	res.render('virtualMe', {pageName: 'Virtual Me'});
 	//runOauth2(res);
 	/*
 	function fitbitCall(apiUrl,callback){
@@ -289,8 +291,8 @@ app.route('/virtualMe').get(function(req, res){
 		console.log('fitbit');
 	})
 	*/
-	console.log('params: '+req.params);
-	console.log('keys: '+Object.keys(req.params));
+	//console.log('params: '+req.params);
+	//console.log('keys: '+Object.keys(req.params));
 	
 });
 
