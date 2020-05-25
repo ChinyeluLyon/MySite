@@ -7,7 +7,47 @@ const path = require('path');
 const formidable = require('formidable');
 const request = require('request');
 const jwt = require("jsonwebtoken");
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
+
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, '/pugFiles'));
+app.use(express.urlencoded({ extended: true }));
+app.use("/javaScript", express.static(path.join(__dirname, "/javaScript")));
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/slick")));
+app.use("/DataTables", express.static(path.join(__dirname, "/DataTables")));
+app.use(cookieParser());
+
+async function runOauth2(res) {
+	const credentials = {
+		client: {
+			id: '22BQRF',
+			secret: 'eaf4e976d0d88f3f7d9e8f8813bf151b'
+		},
+		auth: {
+			tokenHost: 'https://www.fitbit.com'
+		}
+	};
+	const oauth2 = require('simple-oauth2').create(credentials);
+	const authorizationUri = oauth2.authorizationCode.authorizeURL({
+		redirect_uri: 'https://chinyelu.herokuapp.com/virtualMe'
+
+	});
+	res.redirect(authorizationUri);
+	const tokenConfig = {
+		code: '298d885039232b4ae3e96b45fccbb7e23e1b1f17',
+		redirect_uri: 'https://chinyelu.herokuapp.com/virtualMe'
+
+	};
+	try {
+		const result = await oauth2.authorizationCode.getToken(tokenConfig);
+		const accessToken = oauth2.accessToken.create(result);
+	} catch (error) {
+		console.log('Access Token Error', error.message);
+	}
+}
+
 
 //making client secret for my JSON Web Token (JWT) to store in .env File
 /*
@@ -32,7 +72,6 @@ function generateAccessToken(username) {
 function authenticateToken(req, res, next) {
 	console.log('authenticating...');
 	const token = req.cookies.token;
-	
 	if (!token){
 		res.render('signUpOrLogIn');
 	} 
@@ -53,28 +92,8 @@ function authenticateToken(req, res, next) {
 
 const ApiKeyTMDB = '8b3e4cee4754a035bb9ad2a02fd1e7f3';
 
-//simple-oauth2
-const credentials = {
-	client: {
-		id: '22BQRF',
-		secret: 'eaf4e976d0d88f3f7d9e8f8813bf151b'
-	},
-	auth: {
-		tokenHost: 'https://api.fitbit.com/oauth2/token'
-	}
-};
-const oauth2 = require('simple-oauth2').create(credentials);
-console.log('DUNNO: '+oauth2);
 
-//set up template engine
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, '/pugFiles'));
-app.use(express.urlencoded({ extended: true }));
-app.use("/javaScript", express.static(path.join(__dirname, "/javaScript")));
-app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
-app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/slick")));
-app.use("/DataTables", express.static(path.join(__dirname, "/DataTables")));
-app.use(cookieParser());
+
 
 
 //Connect to my database
@@ -257,7 +276,27 @@ app.route('/randomFilm').get(function(req, res){
 
 
 app.route('/virtualMe').get(function(req, res){
-	res.render('virtualMe', {pageName: 'Virtual Me'});
+	//res.render('virtualMe', {pageName: 'Virtual Me'});
+	//runOauth2(res);
+	/*
+	function fitbitCall(apiUrl,callback){
+		request(apiUrl, { json: true }, (err, res, body) => {
+			if (err) { return console.log(err); }
+			return callback(body);
+		});
+	}
+	fitbitCall(fitbitAuthURL, function(){
+		console.log('fitbit');
+	})
+	*/
+	console.log('params: '+req.params);
+	
+});
+
+app.route('/connectFitbitAccount').get(function(req,res){
+	console.log('attempting fitbit connection...');
+	var fitbitAuthURL = 'https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FvirtualMe&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=30'
+	res.redirect(fitbitAuthURL);
 });
 
 app.post('/ajaxSignUp', function (req, res){  
