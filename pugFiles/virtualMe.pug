@@ -4,11 +4,11 @@ html
 	include Templates/header.pug
 
 script(type='text/javascript').
-	alert(window.location.hash);
-
+	var at = window.location.hash; 
+	
 	$.post('/requestFitbit',
 	{
-		postData: window.location.hash
+		postData: at
 	},
 	function(data, status){
 		alert('sent');
