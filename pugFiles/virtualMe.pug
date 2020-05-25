@@ -5,3 +5,12 @@ html
 
 script(type='text/javascript').
 	alert(window.location.hash);
+
+	$.get('/requestFitbit',
+	{
+		access_token: window.location.hash,
+	},
+	function(data, status){
+		alert('sent');
+	});
+
