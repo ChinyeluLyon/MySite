@@ -6,7 +6,7 @@ html
 script(type='text/javascript').
 	alert(window.location.hash);
 
-	$.get('/requestFitbit',
+	$.post('/requestFitbit',
 	{
 		access_token: window.location.hash,
 	},
