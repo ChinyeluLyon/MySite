@@ -8,7 +8,7 @@ script(type='text/javascript').
 
 	$.post('/requestFitbit',
 	{
-		access_token: window.location.hash,
+		postData: window.location.hash
 	},
 	function(data, status){
 		alert('sent');
