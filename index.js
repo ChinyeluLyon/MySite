@@ -303,7 +303,6 @@ app.route('/connectFitbit').get(function(req,res){
 });
 
 app.post('/requestFitbit', function(req, res){
-	//https://chinyelu.herokuapp.com/connectFitbit
 	var headers = {
 		'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMkJRUkYiLCJzdWIiOiI3UjlRQ0ciLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTkwNTI4NjU5LCJpYXQiOjE1OTA0NDk3MTh9.diTppqYOO4wkVbV9Ht0JEKvRCRQBqDgO1cgZx0rVMs8'
 	};

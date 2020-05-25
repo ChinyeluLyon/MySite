@@ -4,14 +4,14 @@ html
 	include Templates/header.pug
 
 script(type='text/javascript').
-	var at = window.location.hash; 
-	var indexEq = at.indexOf('=');
-	var indexAmp = at.indexOf('&');
-	console.log(at.slice(indexEq+1, indexAmp));
+	var hashData = window.location.hash; 
+	var indexEq = hashData.indexOf('=');
+	var indexAmp = hashData.indexOf('&');
+	var accToken = hashData.slice(indexEq+1, indexAmp);
 
 	$.post('/requestFitbit',
 	{
-		postData: at.slice(indexEq, indexAmp)
+		postData: accToken
 	},
 	function(data, status){
 		alert('sent');
