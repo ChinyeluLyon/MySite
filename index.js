@@ -309,7 +309,7 @@ app.post('/requestFitbit', function(req, res){
 	console.log('*********OOJJJJOOOO*************');
 	request({
 		headers: {
-			'Authorization': 'bearer'+req.query.access_token
+			'Authorization': 'bearer'+req.body.access_token
 		},
 		uri: 'https://api.fitbit.com/1/user/-/profile.json',
 		body: formData,
