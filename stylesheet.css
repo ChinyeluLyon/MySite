@@ -16,13 +16,15 @@ body{
 #homePageTitle {
 	position: absolute;
 	text-align: center;
-	width: 100%;
-	font-size: 17vmax;
+	width: 99%;
+	font-size: 15vmax;
 	display: none;
 }
 #homePageImage{
 	display:none; 
-	width:96vmax;
+	width:100vmax;
+	position: fixed;
+	z-index: -1;
 }
 
 .homeButtons {
@@ -31,20 +33,16 @@ body{
 	text-align: center;
 	padding: 3vmax;
 	text-decoration: none;
-    top: 57vmax;
+	top: 57vmax;
 	border: solid 4px black;
 	backdrop-filter: blur(10px);
 }
 
 #homeButtonsOne {
-    left: 14vmax;
-    top: 42vmax;
-    right: 14vmax;
-}
-#homeButtonsTwo {
-    right: 14vmax;
-    left: 14vmax;
-    top: 55vmax;
+    left: 20vmax;
+    top: 28vmax;
+    right: 20vmax;
+    border-radius: 5vmax;
 }
 
 .navBar h1, .navBar h2{
