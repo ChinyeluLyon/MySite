@@ -296,18 +296,31 @@ app.route('/virtualMe').get(function(req, res){
 	//console.log('keys: '+Object.keys(req.params));
 });
 
-app.route('/connectFitbitAccount').get(function(req,res){
+app.route('/connectFitbit').get(function(req,res){
 	console.log('attempting fitbit connection...');
 	var fitbitAuthURL = 'https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FvirtualMe&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=30'
 	res.redirect(fitbitAuthURL);
 });
 
 app.post('/requestFitbit', function(req, res){
-	//https://chinyelu.herokuapp.com/connectFitbitAccount
+	//https://chinyelu.herokuapp.com/connectFitbit
+	var headers = {
+		'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMkJRUkYiLCJzdWIiOiI3UjlRQ0ciLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJhY3QgcnNldCBybG9jIHJ3ZWkgcmhyIHJudXQgcnBybyByc2xlIiwiZXhwIjoxNTkwNTI4NjU5LCJpYXQiOjE1OTA0NDk3MTh9.diTppqYOO4wkVbV9Ht0JEKvRCRQBqDgO1cgZx0rVMs8'
+	};
+	var options = {
+		url: 'https://api.fitbit.com/1/user/-/profile.json',
+		headers: headers
+	};
+	function callback(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			console.log(body);
+		}
+	}
+	request(options, callback);
 
 	request({
 		headers: {
-			'Authorization': 'bearer'+req.body.postData
+			'Authorization': 'Bearer '+req.body.postData
 		},
 		uri: 'https://api.fitbit.com/1/user/-/profile.json',
 		method: 'POST'
@@ -317,11 +330,6 @@ app.post('/requestFitbit', function(req, res){
 });
 
 app.post('/ajaxSignUp', function (req, res){  
-	//console.log('Name: '+req.body.Name);
-	//console.log('Age: '+req.body.Age);
-	//console.log('Gender: '+req.body.Gender);
-	//console.log('Password: '+req.body.Password);
-	//console.log('req received');
 
 	if(!req.body.Name || !req.body.DOB || !req.body.Gender){
 		console.log('Must fill all user fields!!');
