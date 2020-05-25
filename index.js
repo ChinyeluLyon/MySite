@@ -290,6 +290,7 @@ app.route('/virtualMe').get(function(req, res){
 	})
 	*/
 	console.log('params: '+req.params);
+	console.log('keys: '+Object.keys(req.params));
 	
 });
 
