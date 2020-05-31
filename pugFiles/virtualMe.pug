@@ -8,8 +8,10 @@ script(type='text/javascript').
 	var indexEq = hashData.indexOf('=');
 	var indexAmp = hashData.indexOf('&');
 	var accToken = hashData.slice(indexEq+1, indexAmp);
-
-	$.post('/requestFitbit',
+	alert(indexEq);
+	alert(indexAmp);
+	alert(accToken);
+	/*$.post('/requestFitbit',
 	{
 		postData: accToken
 	},
