@@ -304,7 +304,7 @@ app.route('/connectFitbit').get(function(req,res){
 
 app.post('/requestFitbit', function(req, res){
 	console.log('Fitbit Access Token: '+ req.body.postData);
-	
+	/*
 	var headers = {
 		'Authorization': 'Bearer '+req.body.postData
 	};
@@ -318,17 +318,15 @@ app.post('/requestFitbit', function(req, res){
 		}
 	}
 	request(options, callback);
-/*
+*/
 	request({
 		headers: {
 			'Authorization': 'Bearer '+req.body.postData
 		},
-		uri: 'https://api.fitbit.com/1/user/-/profile.json',
-		method: 'POST'
+		uri: 'https://api.fitbit.com/1/user/-/profile.json'
 	}, function (err, res, body) {
 		console.log('body: '+body);
 	});
-	*/
 });
 
 app.post('/ajaxSignUp', function (req, res){  
