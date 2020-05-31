@@ -303,22 +303,6 @@ app.route('/connectFitbit').get(function(req,res){
 });
 
 app.post('/requestFitbit', function(req, res){
-	console.log('Fitbit Access Token: '+ req.body.postData);
-	/*
-	var headers = {
-		'Authorization': 'Bearer '+req.body.postData
-	};
-	var options = {
-		url: 'https://api.fitbit.com/1/user/-/profile.json',
-		headers: headers
-	};
-	function callback(error, response, body) {
-		if (!error && response.statusCode == 200) {
-			console.log(body);
-		}
-	}
-	request(options, callback);
-*/
 	request({
 		headers: {
 			'Authorization': 'Bearer '+req.body.postData
