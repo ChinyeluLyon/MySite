@@ -303,11 +303,24 @@ app.route('/connectFitbit').get(function(req,res){
 });
 
 app.post('/requestFitbit', function(req, res){
+	var fitbitUserId = req.body.fitbitUserId;
+	console.log('user id: '+ fitbitUserId);
 	request({
 		headers: {
-			'Authorization': 'Bearer '+req.body.postData
+			'Authorization': 'Bearer '+req.body.fitbitAccToken
 		},
 		uri: 'https://api.fitbit.com/1/user/-/profile.json'
+	}, function (err, res, body) {
+		var userData = JSON.parse(body);
+		console.log('keys: '+Object.keys(userData.user));
+	});
+});
+
+app.post('/getFitbitActivitiesData', function(req, res){
+	var dateNow = new Date().toISOString().slice(0,10);
+	var activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json';
+	request({
+		uri: activitiesURL
 	}, function (err, res, body) {
 		var userData = JSON.parse(body);
 		console.log('keys: '+Object.keys(userData.user));

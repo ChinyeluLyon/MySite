@@ -9,11 +9,16 @@ script(type='text/javascript').
 	var indexAmp = hashData.indexOf('&');
 	var accToken = hashData.slice(indexEq+1, indexAmp);
 	
+	var indexUserId = hashData.indexOf('user_id=');
+	var indexScope = hashData.indexOf('&scope=');
+	var userId = hashData.slice(indexUserId+8, indexScope);
+	
 	alert('TOKEN: '+ accToken);
 	
 	$.post('/requestFitbit',
 	{
-		postData: accToken
+		fitbitAccToken: accToken,
+		fitbitUserId: userId
 	},
 	function(data, status){
 		alert('sent');
