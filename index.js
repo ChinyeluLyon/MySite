@@ -309,9 +309,8 @@ app.post('/requestFitbit', function(req, res){
 		},
 		uri: 'https://api.fitbit.com/1/user/-/profile.json'
 	}, function (err, res, body) {
-		console.log('user data: '+body);
-		console.log('user data type: '+ typeof(body));
-		console.log('keys: '+Object.keys(body)[0]);
+		var userData = JSON.parse(body);
+		console.log('keys: '+Object.keys(userData));
 	});
 });
 
