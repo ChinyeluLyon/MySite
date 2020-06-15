@@ -27,8 +27,10 @@ script(type='text/javascript').
 	});
 
 	$('.activity').click(function(){
+		debugger;
 		$.get('/getFitbitActivitiesData',
 		function(data, status){
+			console.log(data.userData);
 			alert('sent');
 		});
 	});
