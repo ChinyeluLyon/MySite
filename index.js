@@ -318,6 +318,7 @@ app.post('/requestFitbit', function(req, res){
 
 app.get('/getFitbitActivitiesData', function(req, res){
 	var dateNow = new Date().toISOString().slice(0,10);
+	console.log("dateNow: "+dateNow);
 	var activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json';
 	// GET https://api.fitbit.com/1/user/[user-id]/activities/date/[date].json
 
@@ -325,7 +326,8 @@ app.get('/getFitbitActivitiesData', function(req, res){
 		uri: activitiesURL
 	}, function (err, res, body) {
 		var userData = JSON.parse(body);
-		console.log('ACTIVITY keys: '+Object.keys(userData.user));
+		console.log("userData: "+userData);
+		// console.log('ACTIVITY keys: '+Object.keys(userData.user));
 	});
 });
 
