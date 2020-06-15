@@ -27,11 +27,7 @@ script(type='text/javascript').
 	});
 
 	$('.activity').click(function(){
-		$.post('/requestFitbit',
-		{
-			fitbitAccToken: accToken,
-			fitbitUserId: userId
-		},
+		$.get('/getFitbitActivitiesData',
 		function(data, status){
 			alert('sent');
 		});
