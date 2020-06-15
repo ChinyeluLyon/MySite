@@ -331,12 +331,12 @@ app.get('/getFitbitActivitiesData', function(req, res){
 		},
 		uri: activitiesURL
 	}, function (err, res, body) {
-		var userData = JSON.parse(body);
-		console.log("userData: "+userData);
-		console.log("ACTIVITY keys: "+Object.keys(userData));
+		var activityData = JSON.parse(body);
+		console.log("activityData: "+activityData.summary);
+		// console.log("ACTIVITY keys: "+Object.keys(activityData));
 	});
 	res.send({
-		data: userData
+		activitySummary: activityData.summary
 	});
 });
 
