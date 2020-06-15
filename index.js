@@ -325,7 +325,6 @@ app.get('/getFitbitActivitiesData', function(req, res){
 	// GET https://api.fitbit.com/1/user/[user-id]/activities/date/[date].json
 	// GET https://api.fitbit.com/1/user/7R9QCG/activities/date/2020-06-15.json
 
-	var sendTest = "blank";
 	request({
 		headers: {
 			'Authorization': 'Bearer '+req.query.accessToken
@@ -334,11 +333,10 @@ app.get('/getFitbitActivitiesData', function(req, res){
 	}, function (err, res, body) {
 		var userData = JSON.parse(body);
 		console.log("userData: "+userData);
-		sendTest = userData;
-		// console.log('ACTIVITY keys: '+Object.keys(userData.user));
+		console.log('ACTIVITY keys: '+Object.keys(userData.user));
 	});
 	res.send({
-		data: sendTest
+		data: userData
 	});
 });
 
