@@ -28,6 +28,9 @@ script(type='text/javascript').
 
 	$('.activity').click(function(){
 		$.get('/getFitbitActivitiesData',
+		{
+			accessToken: accToken
+		},
 		function(data, status){
 			debugger;
 			console.log(data.userData);
