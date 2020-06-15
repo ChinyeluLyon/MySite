@@ -312,15 +312,18 @@ app.post('/requestFitbit', function(req, res){
 		uri: 'https://api.fitbit.com/1/user/-/profile.json'
 	}, function (err, res, body) {
 		var userData = JSON.parse(body);
-		console.log('keys: '+Object.keys(userData.user));
+		// console.log('keys: '+Object.keys(userData.user));
+		console.log('DATA: '+userData.user);
 	});
 });
 
 app.get('/getFitbitActivitiesData', function(req, res){
 	var dateNow = new Date().toISOString().slice(0,10);
 	console.log("dateNow: "+dateNow);
+	console.log("AT: "+req.body.accessToken);
 	var activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json';
 	// GET https://api.fitbit.com/1/user/[user-id]/activities/date/[date].json
+	// GET https://api.fitbit.com/1/user/7R9QCG/activities/date/2020-06-15.json
 
 	var sendTest = "blank";
 	request({
