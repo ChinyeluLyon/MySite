@@ -27,10 +27,11 @@ script(type='text/javascript').
 	});
 
 	$('.activity').click(function(){
-		debugger;
 		$.get('/getFitbitActivitiesData',
 		function(data, status){
+			debugger;
 			console.log(data.userData);
+			alert(data.userData);
 			alert('sent');
 		});
 	});
