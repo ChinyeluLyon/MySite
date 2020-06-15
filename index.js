@@ -321,16 +321,17 @@ app.get('/getFitbitActivitiesData', function(req, res){
 	console.log("dateNow: "+dateNow);
 	var activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json';
 	// GET https://api.fitbit.com/1/user/[user-id]/activities/date/[date].json
-
+var sendTest = "blank";
 	request({
 		uri: activitiesURL
 	}, function (err, res, body) {
 		var userData = JSON.parse(body);
 		console.log("userData: "+userData);
-		res.send({
-			data: userData
-		});
+		sendTest = userData;
 		// console.log('ACTIVITY keys: '+Object.keys(userData.user));
+	});
+	res.send({
+		data: sendTest
 	});
 });
 
