@@ -333,7 +333,7 @@ app.get('/getFitbitActivitiesData', function(req, res){
 	}, function (err, res, body) {
 		var userData = JSON.parse(body);
 		console.log("userData: "+userData);
-		console.log('ACTIVITY keys: '+Object.keys(userData.user));
+		console.log("ACTIVITY keys: "+Object.keys(userData));
 	});
 	res.send({
 		data: userData
