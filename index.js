@@ -316,14 +316,16 @@ app.post('/requestFitbit', function(req, res){
 	});
 });
 
-app.post('/getFitbitActivitiesData', function(req, res){
+app.get('/getFitbitActivitiesData', function(req, res){
 	var dateNow = new Date().toISOString().slice(0,10);
 	var activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json';
+	// GET https://api.fitbit.com/1/user/[user-id]/activities/date/[date].json
+
 	request({
 		uri: activitiesURL
 	}, function (err, res, body) {
 		var userData = JSON.parse(body);
-		console.log('keys: '+Object.keys(userData.user));
+		console.log('ACTIVITY keys: '+Object.keys(userData.user));
 	});
 });
 

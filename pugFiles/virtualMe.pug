@@ -3,6 +3,8 @@ doctype html
 html
 	include Templates/header.pug
 
+button(class='activity') Recent Activity
+
 script(type='text/javascript').
 	var hashData = window.location.hash; 
 	var indexEq = hashData.indexOf('=');
@@ -22,5 +24,16 @@ script(type='text/javascript').
 	},
 	function(data, status){
 		alert('sent');
+	});
+
+	$('.activity').click(function(){
+		$.post('/requestFitbit',
+		{
+			fitbitAccToken: accToken,
+			fitbitUserId: userId
+		},
+		function(data, status){
+			alert('sent');
+		});
 	});
 	
