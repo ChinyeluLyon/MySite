@@ -9,33 +9,72 @@ body{
 	justify-content: center;
 	text-align: center;
 }
+#homePageTitle{
+	font-size: 6vmin;
+}
 #homePageImage {
 	position: fixed;
 	filter: grayscale(100%);
 	z-index: 1;
 	bottom: 0px;
-	height: 86vmin;
+	right: 0px;
+	height: 100vmin;
 }
 
-#halo{
-	position: absolute;
-	width: 65vmin;
-	height: 65vmin;
-	background: linear-gradient(180deg, #FF0000 0%, #F4008A 69.79%, #EB00FF 100%), #C4C4C4;
-	border-radius: 50%;
+#testBlock{
+	position: fixed;
+	right: 42vmin;
+	top: 45vmin;
+	transform: rotate(74.08deg);
+	width: 80vmin;
+	height: 80vmin;
+	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
+	z-index: -1;
+}
+.home-list2 li a:hover{
+	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
+	color: white;
+}
+.home-list2 li a{
+	padding-top: 4vmin;
+	padding-bottom: 4vmin;
+	padding-right: 10vmin;
+	padding-left: 10vmin;
+	background-color: grey;
+	border-radius: 15vmin;
+}
+.home-list2 li{
+	margin: 10vmin;
 }
 
-.hidden-list{
-	display: none;
+.home-list li{
+	padding: 6vmin;
+	background-color: grey;
+	margin: 1vmin;
+	border-radius: 10vmin;
 }
-
-
-
-.home-list{
+.home-list2{
 	display: block;
 	position: absolute;
 	list-style-type:none;
 	font-size: 5vmin;
+	left: 1vmin;
+}
+li{
+	list-style-type:none;
+
+}
+
+a:link {
+	color: black;
 	text-decoration: none;
 }
 
+a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}

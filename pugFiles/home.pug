@@ -4,8 +4,7 @@ html
 	include Templates/newHeader.pug
 
 h1(id="homePageTitle") CHINYELU
-
-	ul(class="home-list")
+	ul(class="home-list2")
 		li
 			a(href="/connectFitbit") My Fitbit Project
 		li
@@ -16,9 +15,15 @@ h1(id="homePageTitle") CHINYELU
 			a(href="/about") About
 
 
-div(class='flex-container')
-	img(id='homePageImage' src='../uploads/me.png')
-	div(id='halo')
+img(id='homePageImage' src='../uploads/me3.png')
+div(id='testBlock')
 
+script(type='text/javascript').
+	$('#homePageTitle').click(function(){
+		$('.hidden-list').css('display','block');
+		$('.hidden-list').css('position','absolute');
+		$('.hidden-list').css('list-style-type','none');
+		$('.hidden-list').css('font-size','5vmin');
+		$('.hidden-list a').css('text-decoration','none');
 
-
+	});
