@@ -25,3 +25,17 @@ body{
 	border-radius: 50%;
 }
 
+.hidden-list{
+	display: none;
+}
+
+
+
+.home-list{
+	display: block;
+	position: absolute;
+	list-style-type:none;
+	font-size: 5vmin;
+	text-decoration: none;
+}
+
