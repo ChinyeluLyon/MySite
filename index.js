@@ -141,6 +141,11 @@ app.route("/").get(function(req,res)
 	res.render('home', {pageName: 'Home'});
 });
 
+app.route("/oldHome").get(function(req,res)
+{
+	res.render('oldHome', {pageName: 'Home'});
+});
+
 //users page
 app.route("/users").get(function(req,res)
 {

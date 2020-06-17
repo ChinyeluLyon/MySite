@@ -34,6 +34,8 @@ body{
 .home-list2 li a:hover{
 	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
 	color: white;
+	  transition: 0.9s;
+
 }
 .home-list2 li a{
 	padding-top: 4vmin;
