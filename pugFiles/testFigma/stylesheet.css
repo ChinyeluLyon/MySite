@@ -1,0 +1,16 @@
+
+body{
+	position: relative;
+	width: 1440px;
+	height: 1024px;
+	background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #A8A8A8 100%), #FFFFFF;
+}
+.elipse{
+	position: absolute;
+	width: 652px;
+	height: 652px;
+	left: 379px;
+	top: 147px;
+
+	background: linear-gradient(180deg, #FF0000 0%, #F4008A 69.79%, #EB00FF 100%), #C4C4C4;
+}

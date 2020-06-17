@@ -1,0 +1,30 @@
+doctype html
+
+link(href='https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap' rel='stylesheet')
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+
+
+style
+	include ../stylesheet.css
+
+div
+	h1(id="homePageTitle") CHINYELU
+
+
+	a(href="/connectFitbit") 
+		h2(class='homeButtons' id="homeButtonsOne") My Fitbit Project
+
+
+	img(id='homePageImage' src='../uploads/me.png')
+
+
+script(type="text/javascript").
+
+	$('.topbar').css('display', 'none');
+	$('#homePageImage').fadeIn(1000, function(){
+		$('#homePageTitle').fadeIn(3000, function(){
+			$('#homeButtonsOne').fadeIn(1000, function(){
+				$('#homeButtonsTwo').fadeIn(1000);
+			});
+		});
+	});

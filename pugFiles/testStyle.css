@@ -1,0 +1,27 @@
+h1, h2, h3, a{
+	font-family: 'Sen', sans-serif;
+}
+body{
+	background-color: #9A9A9A;
+}
+.flex-container {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+}
+#homePageImage {
+	position: fixed;
+	filter: grayscale(100%);
+	z-index: 1;
+	bottom: 0px;
+	height: 86vmin;
+}
+
+#halo{
+	position: absolute;
+	width: 65vmin;
+	height: 65vmin;
+	background: linear-gradient(180deg, #FF0000 0%, #F4008A 69.79%, #EB00FF 100%), #C4C4C4;
+	border-radius: 50%;
+}
+
