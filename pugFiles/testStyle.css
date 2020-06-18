@@ -2,6 +2,7 @@ h1, h2, h3, a{
 	font-family: 'Sen', sans-serif;
 }
 body{
+	margin: 0;
 	background-color: #9A9A9A;
 }
 .flex-container {
@@ -19,6 +20,11 @@ body{
 	bottom: 0px;
 	right: 0px;
 	height: 100vmin;
+	transition: 0.8s;
+}
+#homePageImage:hover {
+	filter: none;
+	transition: 0.8s;
 }
 
 #testBlock{
@@ -31,31 +37,27 @@ body{
 	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
 	z-index: -1;
 }
-.home-list2 li a:hover{
+
+.home-list li a:hover{
 	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
 	color: white;
-	  transition: 0.9s;
-
+	transition: 0.9s;
 }
-.home-list2 li a{
+
+.home-list li a{
 	padding-top: 4vmin;
 	padding-bottom: 4vmin;
 	padding-right: 10vmin;
 	padding-left: 10vmin;
 	background-color: grey;
 	border-radius: 15vmin;
+	display: block;
 }
-.home-list2 li{
-	margin: 10vmin;
+.home-list li{
+	margin: 3vmin;
 }
 
-.home-list li{
-	padding: 6vmin;
-	background-color: grey;
-	margin: 1vmin;
-	border-radius: 10vmin;
-}
-.home-list2{
+.home-list{
 	display: block;
 	position: absolute;
 	list-style-type:none;
@@ -71,12 +73,76 @@ a:link {
 	color: black;
 	text-decoration: none;
 }
-
 a:visited {
 	color: black;
 	text-decoration: none;
 }
-
 a:hover {
 	text-decoration: none;
 }
+
+.top-bar-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+
+.top-bar{
+	/*color: white;*/
+	background-color: grey;
+	overflow: hidden;
+	margin-bottom: 6vmin;
+}
+
+#tobBarTitle, #homePageTitle{
+	padding-left: 2vmin;
+}
+
+.top-bar-list li a:hover{
+	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
+	color: white;
+	transition: 0.9s;
+}
+
+.top-bar-list li a{
+	padding-top: 1vmin;
+	padding-bottom: 1vmin;
+	padding-right: 10vmin;
+	padding-left: 10vmin;
+	background-color: grey;
+	border-radius: 15vmin;
+	display: block;
+}
+.button-center:hover{
+	color: white;
+	transition: 0.9s;
+}
+
+.button-center{
+	display: flex;
+	justify-content: center;
+	padding-top: 1vmin;
+	padding-bottom: 1vmin;
+	padding-right: 10vmin;
+	padding-left: 10vmin;
+	border-radius: 15vmin;
+	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
+	margin-right: 50vmin;
+	margin-left: 50vmin;
+	font-size: 5vmin;
+	display: block;
+}
+
+/*slick gallery start*/
+.slick-slide {
+	height: 35vmax;
+}
+.carousel {
+	width: 90vmax !important;
+	margin: auto;
+}
+
+.slick-next:before, .slick-prev:before{
+	color: black;
+}
+/*slick gallery end*/

@@ -1,29 +1,31 @@
 doctype html
 
-html
-	include Templates/newHeader.pug
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+script(type="text/javascript" charset="utf8" src="/DataTables/datatables.js")
+
+link(href="https://fonts.googleapis.com/css2?family=Sen:wght@700&display=swap" rel="stylesheet")
+
+style
+	include testStyle.css
 
 h1(id="homePageTitle") CHINYELU
-	ul(class="home-list2")
+	ul(class="home-list")
 		li
-			a(href="/connectFitbit") My Fitbit Project
+			a(href="/connectFitbit") Fitbit Project
 		li
 			a(href="/gallery") My Gallery
 		li
-			a(href="/randomFilm") My Random Films Project
+			a(href="/randomFilm") Random Films Project
 		li
-			a(href="/about") About
+			a(href="/about") About Me
 
 
 img(id='homePageImage' src='../uploads/me3.png')
 div(id='testBlock')
 
-script(type='text/javascript').
-	$('#homePageTitle').click(function(){
-		$('.hidden-list').css('display','block');
-		$('.hidden-list').css('position','absolute');
-		$('.hidden-list').css('list-style-type','none');
-		$('.hidden-list').css('font-size','5vmin');
-		$('.hidden-list a').css('text-decoration','none');
-
-	});
+script(type="text/javascript").
+	$(".home-list li a").css('display', 'none');
+	$($(".home-list li a")[0]).fadeIn(1000);
+	$($(".home-list li a")[1]).fadeIn(1500);
+	$($(".home-list li a")[2]).fadeIn(2000);
+	$($(".home-list li a")[3]).fadeIn(2500);
