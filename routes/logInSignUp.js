@@ -1,7 +1,7 @@
 const pug = require('pug');
 const express = require('express');
-const mysql = require('mysql');
 const router = express.Router();
+const mysql = require('mysql');
 const connection = mysql.createConnection({
 	host: 'eu-cdbr-west-03.cleardb.net',
 	user: 'bcc861a75b94d1',

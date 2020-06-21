@@ -72,7 +72,40 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		var activityData = JSON.parse(body);
 		console.log("activityData: "+activityData.summary);
 		console.log("ACTIVITY keys: "+Object.keys(activityData.summary));
-		activityArray = activityData.summary.steps;
+		// activityArray = activityData.summary.steps;
+		console.log("ACTIVITY STEPS: "+activityData.summary.steps);
+
+		// check if logged in and get cookie
+		if(!req.query.loggedInCookie || req.query.loggedInCookie == 'token='){
+			console.log('req.query.loggedInCookie: '+req.query.loggedInCookie);
+			console.log('not logged In');
+			console.log('not added to db');
+		}
+		else{
+			console.log('cookie: '+ req.query.loggedInCookie);
+			var token = req.query.loggedInCookie.split('=')[1];
+
+			var getUserIdFromTokenSQL = 'SELECT user_id FROM users WHERE login_token = "'+token+'"';
+			connection.query(getUserIdFromTokenSQL, function(err, rows, fields){
+				if(err){
+					throw err;
+				}else{
+					var insertDataSQL = 'INSERT IGNORE INTO \
+					user_data (user_id, averageDailySteps) \
+					VALUES ("'+rows[0].user_id+'", "'+activityData.summary.steps+'");'
+					connection.query(getUserIdFromTokenSQL, function(err, rows, fields){
+						if(err){
+							throw err;
+						}else{
+							console.log('TODO BIEN');
+						}
+					});
+				}
+			});
+		}
+
+
+
 	});
 
 	// res.json({
