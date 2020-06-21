@@ -7,6 +7,8 @@ const connection = mysql.createConnection({
 	password: '7a2672e3',
 	database: 'heroku_b301eebc16a43c7'
 });
+const request = require('request');
+
 
 router.route('/loginToFitbit').get(function(req,res){
 	res.render('loginToFitbit');
