@@ -16,6 +16,7 @@ script(type='text/javascript').
 	var userId = hashData.slice(indexUserId+8, indexScope);
 	
 	alert('TOKEN: '+ accToken);
+	alert('USER ID: '+ userId);
 	
 	$.post('/requestFitbit',
 	{
