@@ -90,10 +90,11 @@ router.get('/getFitbitActivitiesData', function(req, res){
 				if(err){
 					throw err;
 				}else{
+					console.log('USER ID: '+rows[0].user_id);
 					var insertDataSQL = 'INSERT IGNORE INTO \
 					user_data (user_id, averageDailySteps) \
 					VALUES ("'+rows[0].user_id+'", "'+activityData.summary.steps+'");'
-					connection.query(getUserIdFromTokenSQL, function(err, rows, fields){
+					connection.query(insertDataSQL, function(err, rows, fields){
 						if(err){
 							throw err;
 						}else{
