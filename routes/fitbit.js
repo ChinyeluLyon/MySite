@@ -70,7 +70,8 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		uri: activitiesURL
 	}, function (err, res, body) {
 		var activityData = JSON.parse(body);
-		console.log("activityData: "+activityData.summary);
+		console.log("activityData: *v*");
+		console.log(activityData.summary);
 		console.log("ACTIVITY keys: "+Object.keys(activityData.summary));
 		// activityArray = activityData.summary.steps;
 		console.log("ACTIVITY STEPS: "+activityData.summary.steps);
