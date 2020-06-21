@@ -70,7 +70,7 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		uri: activitiesURL
 	}, function (err, res, body) {
 		var activityData = JSON.parse(body);
-		console.log("activityData: *v*");
+		console.log("activityData:");
 		console.log(activityData.summary);
 		console.log("ACTIVITY keys: "+Object.keys(activityData.summary));
 		// activityArray = activityData.summary.steps;
@@ -94,7 +94,9 @@ router.get('/getFitbitActivitiesData', function(req, res){
 					console.log('USER ID: '+rows[0].user_id);
 					var insertDataSQL = 'INSERT IGNORE INTO \
 					user_data (user_id, averageDailySteps) \
-					VALUES ("'+rows[0].user_id+'", "'+activityData.summary.steps+'");'
+					VALUES ("'+rows[0].user_id+'", "'+activityData.summary.steps+'");';
+					console.log("insertDataSQL");
+					console.log(insertDataSQL);
 					connection.query(insertDataSQL, function(err, rows, fields){
 						if(err){
 							throw err;
