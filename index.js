@@ -52,9 +52,6 @@ connection.connect();
 
 
 
-
-
-
 function handleDisconnect(conn) {
 	conn.on('error', function(err) {
 		if (!err.fatal) {

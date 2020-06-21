@@ -73,9 +73,9 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		activityArray = activityData.summary.steps;
 	});
 
-	res.json({
-		activitySummary: activityArray
-	});
+	// res.json({
+	// 	activitySummary: activityArray
+	// });
 });
 
 async function runOauth2(res) {
