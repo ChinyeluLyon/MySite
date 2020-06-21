@@ -92,9 +92,7 @@ router.get('/getFitbitActivitiesData', function(req, res){
 					throw err;
 				}else{
 					console.log('USER ID: '+rows[0].user_id);
-					var insertDataSQL = 'INSERT IGNORE INTO \
-					user_data (user_id, averageDailySteps) \
-					VALUES ("'+rows[0].user_id+'", "'+activityData.summary.steps+'");';
+					var insertDataSQL = 'INSERT IGNORE INTO user_data (user_id, averageDailySteps) VALUES ("'+rows[0].user_id+'", "'+activityData.summary.steps+'");';
 					console.log("insertDataSQL");
 					console.log(insertDataSQL);
 					connection.query(insertDataSQL, function(err, rows, fields){
