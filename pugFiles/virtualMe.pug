@@ -30,7 +30,7 @@ script(type='text/javascript').
 		$.get('/getFitbitActivitiesData',
 		{
 			accessToken: accToken,
-			loggedIn: document.cookie
+			loggedInCookie: document.cookie
 		},
 		function(data, status){
 			debugger;
