@@ -12,21 +12,23 @@ const connection = mysql.createConnection({
 	database: 'heroku_b301eebc16a43c7'
 })
 
+router.get("/login").get(function(req,res)
+{
+	res.render("newLoginTest")
+})
+router.get("/logout").get(function(req,res)
+{
+	res.send("logging out")
+})
 
-router.route("/google", passport.authenticate('google', {
+router.get("/google", passport.authenticate('google', {
 	scope: ['profile']
 }))
 
-
-router.route("/auth/google").get(function(req,res)
+router.get("/google/redirect").get(function(req,res)
 {
-	res.render("authGoogle")
+	res.send('redirected!')
 })
 
-router.route("/auth/facebook").get(function(req,res)
-{
-	res.render("authFacebook")
-
-})
 
 module.exports = router

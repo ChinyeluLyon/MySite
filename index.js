@@ -31,8 +31,8 @@ const galleryRoute = require('./routes/gallery.js')
 app.use(galleryRoute)
 const usersfitbitRoute = require('./routes/fitbit.js')
 app.use(usersfitbitRoute)
-const authRoutes = require('./routes/auth.js')
-app.use(authRoutes)
+const authRoutes = require('./routes/auth')
+app.use('/auth',authRoutes)
 
 //Connect to database
 let connection = mysql.createConnection({
