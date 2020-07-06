@@ -8,6 +8,7 @@ const formidable = require('formidable')
 const request = require('request')
 const jwt = require("jsonwebtoken")
 const cookieParser = require('cookie-parser')
+const passportSetup = require('./config/passport-setup')
 
 // Set up
 app.set('view engine', 'pug')
