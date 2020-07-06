@@ -13,12 +13,12 @@ const connection = mysql.createConnection({
 
 router.route("/auth/google").get(function(req,res)
 {
-	res.render("authFaceBook")
+	res.render("authGoogle")
 })
 
 router.route("/auth/facebook").get(function(req,res)
 {
-	res.render("authGoogle")
+	res.render("authFacebook")
 
 })
 

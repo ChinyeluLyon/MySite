@@ -19,8 +19,8 @@ div(class='inputFields')
 
 script(type='text/javascript').
 	$('#saveButton').click(function(){
-		var nameVal = $('.userDetailsClass')[0].value;
-		var passwordVal = $('.userDetailsClass')[1].value;
+		let nameVal = $('.userDetailsClass')[0].value
+		let passwordVal = $('.userDetailsClass')[1].value
 
 		$.get('/ajaxLogin',
 		{
@@ -29,13 +29,13 @@ script(type='text/javascript').
 		},
 		function(data, status){
 			if(data.JWT){
-				//alert(data.JWT);
-				document.cookie = 'token='+data.JWT;
-				window.location.replace('/user');
+				//alert(data.JWT)
+				document.cookie = 'token='+data.JWT
+				window.location.replace('/user')
 			}
 			else{
-				alert(data.Message);
+				alert(data.Message)
 			}
-		});
-	});
+		})
+	})
 

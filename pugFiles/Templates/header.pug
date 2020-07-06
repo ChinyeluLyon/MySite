@@ -42,13 +42,13 @@ script(type='text/javascript').
 		function(data, status){
 
 			if(data.loggedInAs){
-				console.log('logged in as '+data.loggedInAs);
-				$('.showIfloggedIn').css('display', 'block');
-				$('.hideIfLoggedIn').css('display', 'none');
+				console.log('logged in as '+data.loggedInAs)
+				$('.showIfloggedIn').css('display', 'block')
+				$('.hideIfLoggedIn').css('display', 'none')
 			}
-		});
+		})
 	$('.logOutButton').click( function(){
-		console.log('token=; expires='+Date()+';');
-		document.cookie = 'token=; expires='+Date()+';';
-	});
+		console.log('token=; expires='+Date()+';')
+		document.cookie = 'token=; expires='+Date()+';'
+	})
 

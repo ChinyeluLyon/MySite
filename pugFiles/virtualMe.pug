@@ -6,17 +6,17 @@ html
 button(class='activity') Recent Activity
 
 script(type='text/javascript').
-	var hashData = window.location.hash; 
-	var indexEq = hashData.indexOf('=');
-	var indexAmp = hashData.indexOf('&');
-	var accToken = hashData.slice(indexEq+1, indexAmp);
+	let hashData = window.location.hash 
+	let indexEq = hashData.indexOf('=')
+	let indexAmp = hashData.indexOf('&')
+	let accToken = hashData.slice(indexEq+1, indexAmp)
 	
-	var indexUserId = hashData.indexOf('user_id=');
-	var indexScope = hashData.indexOf('&scope=');
-	var userId = hashData.slice(indexUserId+8, indexScope);
+	let indexUserId = hashData.indexOf('user_id=')
+	let indexScope = hashData.indexOf('&scope=')
+	let userId = hashData.slice(indexUserId+8, indexScope)
 	
-	alert('TOKEN: '+ accToken);
-	alert('USER ID: '+ userId);
+	alert('TOKEN: '+ accToken)
+	alert('USER ID: '+ userId)
 	
 	$.post('/requestFitbit',
 	{
@@ -24,8 +24,8 @@ script(type='text/javascript').
 		fitbitUserId: userId
 	},
 	function(data, status){
-		alert('sent');
-	});
+		alert('sent')
+	})
 
 	$('.activity').click(function(){
 		$.get('/getFitbitActivitiesData',
@@ -34,8 +34,8 @@ script(type='text/javascript').
 			loggedInCookie: document.cookie
 		},
 		function(data, status){
-			debugger;
-			alert("SUMMARY: "+data.activitySummary);
-		});
-	});
+			debugger
+			alert("SUMMARY: "+data.activitySummary)
+		})
+	})
 	

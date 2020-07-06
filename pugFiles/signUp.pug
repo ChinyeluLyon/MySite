@@ -8,7 +8,7 @@ style
 html
 	include Templates/newHeader.pug
 
-- var uploadMessage = 'Select a user image'
+- let uploadMessage = 'Select a user image'
 
 div(class='upload')
 	include fileUpload.pug
@@ -27,10 +27,10 @@ div(class='inputFields')
 
 script(type='text/javascript').
 	$('#saveButton').click(function(){
-		var nameVal = $('.userDetailsClass')[0].value;
-		var DOBVal = $('.userDetailsClass')[1].value;
-		var genderVal = $('.userDetailsClass')[2].value;
-		var passwordVal = $('.userDetailsClass')[3].value;
+		let nameVal = $('.userDetailsClass')[0].value
+		let DOBVal = $('.userDetailsClass')[1].value
+		let genderVal = $('.userDetailsClass')[2].value
+		let passwordVal = $('.userDetailsClass')[3].value
 
 		$.post('/ajaxSignUp',
 		{
@@ -40,7 +40,7 @@ script(type='text/javascript').
 			Password: passwordVal
 		},
 		function(data, status){
-			//alert('Data: ' + data + '\nStatus: ' + status);
-			document.cookie = 'token='+data;
-		});
-	});
+			//alert('Data: ' + data + '\nStatus: ' + status)
+			document.cookie = 'token='+data
+		})
+	})
