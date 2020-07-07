@@ -20,13 +20,13 @@ router.get("/logout").get(function(req,res)
 })
 
 router.get("/google", passport.authenticate('google', {
-	scope: ['profile']
+	scope: ['profile', 'email']
 }))
 
-router.route("/google/redirect").get(function(req,res)
-{
+router.get("/google/redirect", passport.authenticate('google'), (req,res)=>{
 	res.send('REDIRECTED!!')
 })
+
 
 
 module.exports = router
