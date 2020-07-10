@@ -94,7 +94,9 @@ handleDisconnect(connection);
 
 //home page
 app.route("/").get(function(req,res)
-{
+{	
+	console.log('OYE')
+	console.log(req.user)
 	res.render('home', {pageName: 'Home'})
 })
 

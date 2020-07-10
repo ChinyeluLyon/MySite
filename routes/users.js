@@ -101,7 +101,6 @@ router.route('/users/:ID').get(function(req,res)
 })
 
 const checkIfLoggedInAuth = (req, res, next)=>{
-	console.log('here')
 	if (!req.user){
 		res.redirect('/auth/login')
 	}
