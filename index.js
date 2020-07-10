@@ -33,8 +33,6 @@ app.use(passport.session())
 // Routes
 const usersRoute = require('./routes/users.js')
 app.use(usersRoute)
-const logInSignUpRoute = require('./routes/logInSignUp.js')
-app.use(logInSignUpRoute)
 const randomFilmsRoute = require('./routes/randomFilms.js')
 app.use(randomFilmsRoute)
 const galleryRoute = require('./routes/gallery.js')
@@ -92,7 +90,6 @@ handleDisconnect(connection);
 //home page
 app.route("/").get(function(req,res)
 {	
-	console.log('OYE')
 	console.log(req.user)
 	res.render('home', {pageName: 'Home'})
 })

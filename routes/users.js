@@ -36,27 +36,27 @@ router.route("/users").get(function(req,res)
 
 })
 
-router.route('/user').get(authenticateToken, function(req,res)
-{
-	console.log('SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"')
-	let sqlQuery = 'SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"'
-	connection.query(sqlQuery, function (err, rows, fields) {
-		if (err) {
-			throw err
-			console.log('The solution is: ', rows[0].solution)
-		}
-		else{
-			let nowDate = new Date()
-			let age = new Date(nowDate - rows[0].user_DOB)
+// router.route('/user').get(authenticateToken, function(req,res)
+// {
+// 	console.log('SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"')
+// 	let sqlQuery = 'SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"'
+// 	connection.query(sqlQuery, function (err, rows, fields) {
+// 		if (err) {
+// 			throw err
+// 			console.log('The solution is: ', rows[0].solution)
+// 		}
+// 		else{
+// 			let nowDate = new Date()
+// 			let age = new Date(nowDate - rows[0].user_DOB)
 
-			res.render('user', 
-			{
-				Name: rows[0].user_name,
-				Age: age.getUTCFullYear() - 1970
-			})
-		}
-	})
-})
+// 			res.render('user', 
+// 			{
+// 				Name: rows[0].user_name,
+// 				Age: age.getUTCFullYear() - 1970
+// 			})
+// 		}
+// 	})
+// })
 
 
 //this is a new webpage, should show specific user
