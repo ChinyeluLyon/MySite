@@ -9,12 +9,12 @@ const passport = require('passport')
 // router.use(passport.session())
 
 
-router.get("/login").get(function(req,res)
+router.route("/login").get(function(req,res)
 {
 	res.render("newLoginTest")
 })
 
-router.get("/logout").get(function(req,res)
+router.route("/logout").get(function(req,res)
 {
 	res.send("logging out")
 })

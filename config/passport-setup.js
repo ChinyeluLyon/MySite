@@ -9,6 +9,13 @@ const connection = mysql.createConnection({
 	database: 'heroku_b301eebc16a43c7'
 })
 
+passport.serializeUser((userID,done)=>{
+	done(null,userID)
+})
+passport.deserializeUser((userID,done)=>{
+	done(null,userID)
+})
+
 function addGoogleUserDataToDb(userName, email, profileImageUrl){
 	let sqlQuery = '\
 	INSERT IGNORE INTO \
@@ -22,6 +29,21 @@ function addGoogleUserDataToDb(userName, email, profileImageUrl){
 		}
 		else{
 			console.log('Query Successful!')
+		}
+	})
+}
+
+function getUserId(userName, email, profileImageUrl, callback){
+	let sqlQuery = 'SELECT * FROM new_users WHERE user_name = "'+userName+'" AND user_email = "'+email+'" AND  user_image_url = "'+profileImageUrl+'" '
+	console.log(sqlQuery)
+	connection.query(sqlQuery, function (err, rows, fields) {
+		if (err) {
+			throw err
+			console.log('The solution is: ', rows[0].solution)
+		}
+		else{
+			console.log('Query Successful!')
+			callback(rows[0].user_id)
 		}
 	})
 }
@@ -40,6 +62,9 @@ passport.use(new GoogleStrategy({
 			let userImageUrl = email._json.picture
 
 			addGoogleUserDataToDb(userName, userEmail, userImageUrl)
+			getUserId(userName, userEmail, userImageUrl, function(userIDResponse){
+				done(null, userIDResponse)
+			})
 		}
 
 	})
