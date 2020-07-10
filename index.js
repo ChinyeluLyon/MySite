@@ -4,15 +4,12 @@ const app = express()
 const mysql = require('mysql')
 const pug = require('pug')
 const path = require('path')
-const formidable = require('formidable')
 const request = require('request')
-const jwt = require("jsonwebtoken")
 const cookieParser = require('cookie-parser')
 const passportSetup = require('./config/passport-setup')
 const cookieSession = require('cookie-session')
 const keys = require('./config/keys')
 const passport = require('passport')
-
 
 // Set up
 app.set('view engine', 'pug')
