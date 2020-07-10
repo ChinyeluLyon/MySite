@@ -9,6 +9,7 @@ const connection = mysql.createConnection({
 	database: 'heroku_b301eebc16a43c7'
 })
 const jwt = require("jsonwebtoken")
+
 //making client secret for my JSON Web Token (JWT) to store in .env File
 /*
 //const myJWTToken = require('crypto').randomBytes(64).toString('hex')
@@ -99,6 +100,19 @@ router.route('/users/:ID').get(function(req,res)
 	})
 })
 
+const checkIfLoggedInAuth = (req, res, next)=>{
+	console.log('here')
+	if (!req.user){
+		res.redirect('/auth/login')
+	}
+	else{
+		next()
+	}
+}
+
+router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
+	res.send('logged in as user no.' + req.user)
+})
 
 //authenticating tokens
 function authenticateToken(req, res, next) {

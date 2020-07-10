@@ -9,8 +9,8 @@ const connection = mysql.createConnection({
 	database: 'heroku_b301eebc16a43c7'
 })
 
-passport.serializeUser((userID,done)=>{
-	done(null,userID)
+passport.serializeUser((user,done)=>{
+	done(null,user.user_id)
 })
 passport.deserializeUser((userID,done)=>{
 	done(null,userID)
@@ -42,8 +42,15 @@ function getUserId(userName, email, profileImageUrl, callback){
 			console.log('The solution is: ', rows[0].solution)
 		}
 		else{
+			let userObj = {
+				user_id: rows[0].user_id,
+				user_name: userName,
+				user_email: email
+			}
+
 			console.log('Query Successful!')
-			callback(rows[0].user_id)
+			callback(userObj)
+			// callback(rows[0].user_id)
 		}
 	})
 }

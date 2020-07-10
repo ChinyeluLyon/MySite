@@ -24,7 +24,8 @@ router.get("/google", passport.authenticate('google', {
 }))
 
 router.get("/google/redirect", passport.authenticate('google'), (req,res)=>{
-	res.send('REDIRECTED!!')
+	// res.send(req.user.user_name +" user email = "+ req.user.user_email)
+	res.redirect('/userProfile/')
 })
 
 
