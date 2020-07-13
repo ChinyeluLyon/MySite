@@ -76,33 +76,21 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		// activityArray = activityData.summary.steps
 		console.log("ACTIVITY STEPS: "+activityData.summary.steps)
 
-		console.log(req.user)
 		// check if logged in and get cookie
-		if(!req.query.loggedInCookie || req.query.loggedInCookie == 'token='){
-			console.log('req.query.loggedInCookie: '+req.query.loggedInCookie)
+		if(!req.user){
 			console.log('not logged In')
 			console.log('not added to db')
 		}
 		else{
-			console.log('cookie: '+ req.query.loggedInCookie)
-			let token = req.query.loggedInCookie.split('=')[1]
-
-			let getUserIdFromTokenSQL = 'SELECT user_id FROM users WHERE login_token = "'+token+'"'
-			connection.query(getUserIdFromTokenSQL, function(err, rows, fields){
+			console.log('USER ID: '+req.user)
+			let insertDataSQL = 'INSERT IGNORE INTO new_users (user_id, recent_daily_steps) VALUES ("'+req.user+'", '+activityData.summary.steps+')'
+			console.log("insertDataSQL")
+			console.log(insertDataSQL)
+			connection.query(insertDataSQL, function(err, rows, fields){
 				if(err){
 					throw err
 				}else{
-					console.log('USER ID: '+rows[0].user_id)
-					let insertDataSQL = 'INSERT IGNORE INTO user_data (user_id, averageDailySteps) VALUES ("'+rows[0].user_id+'", '+activityData.summary.steps+')'
-					console.log("insertDataSQL")
-					console.log(insertDataSQL)
-					connection.query(insertDataSQL, function(err, rows, fields){
-						if(err){
-							throw err
-						}else{
-							console.log('TODO BIEN')
-						}
-					})
+					console.log('TODO BIEN')
 				}
 			})
 		}
