@@ -94,9 +94,9 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 }
 
 router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
-	res.send('logged in as user no.' + req.user)
+	// res.send('logged in as user no.' + req.user)
+	res.render('userProfile', { userNo: req.user })
 })
-
 
 
 module.exports = router
