@@ -9,14 +9,15 @@ const passport = require('passport')
 // router.use(passport.session())
 
 
-router.get("/login").get(function(req,res)
+router.route("/login").get(function(req,res)
 {
 	res.render("newLoginTest")
 })
 
-router.get("/logout").get(function(req,res)
+router.route("/logout").get(function(req,res)
 {
-	res.send("logging out")
+	req.logout()
+	res.redirect('/')
 })
 
 router.get("/google", passport.authenticate('google', {
@@ -24,7 +25,8 @@ router.get("/google", passport.authenticate('google', {
 }))
 
 router.get("/google/redirect", passport.authenticate('google'), (req,res)=>{
-	res.send('REDIRECTED!!')
+	// res.send(req.user.user_name +" user email = "+ req.user.user_email)
+	res.redirect('/userProfile/')
 })
 
 

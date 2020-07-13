@@ -8,21 +8,6 @@ const connection = mysql.createConnection({
 	password: '7a2672e3',
 	database: 'heroku_b301eebc16a43c7'
 })
-const jwt = require("jsonwebtoken")
-//making client secret for my JSON Web Token (JWT) to store in .env File
-/*
-//const myJWTToken = require('crypto').randomBytes(64).toString('hex')
-const myJWTToken = require("crypto")
-	.createHash("sha256")
-	.update("userID")
-	.digest("hex")
-
-console.log('||'+myJWTToken+'||')
-*/
-
-const dotenv = require('dotenv')
-dotenv.config()
-const secret = process.env.TOKEN_SECRET
 
 router.route("/users").get(function(req,res)
 {
@@ -51,27 +36,27 @@ router.route("/users").get(function(req,res)
 
 })
 
-router.route('/user').get(authenticateToken, function(req,res)
-{
-	console.log('SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"')
-	let sqlQuery = 'SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"'
-	connection.query(sqlQuery, function (err, rows, fields) {
-		if (err) {
-			throw err
-			console.log('The solution is: ', rows[0].solution)
-		}
-		else{
-			let nowDate = new Date()
-			let age = new Date(nowDate - rows[0].user_DOB)
+// router.route('/user').get(authenticateToken, function(req,res)
+// {
+// 	console.log('SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"')
+// 	let sqlQuery = 'SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"'
+// 	connection.query(sqlQuery, function (err, rows, fields) {
+// 		if (err) {
+// 			throw err
+// 			console.log('The solution is: ', rows[0].solution)
+// 		}
+// 		else{
+// 			let nowDate = new Date()
+// 			let age = new Date(nowDate - rows[0].user_DOB)
 
-			res.render('user', 
-			{
-				Name: rows[0].user_name,
-				Age: age.getUTCFullYear() - 1970
-			})
-		}
-	})
-})
+// 			res.render('user', 
+// 			{
+// 				Name: rows[0].user_name,
+// 				Age: age.getUTCFullYear() - 1970
+// 			})
+// 		}
+// 	})
+// })
 
 
 //this is a new webpage, should show specific user
@@ -99,27 +84,19 @@ router.route('/users/:ID').get(function(req,res)
 	})
 })
 
-
-//authenticating tokens
-function authenticateToken(req, res, next) {
-	console.log('authenticating...')
-	const token = req.cookies.token
-	if (!token){
-		res.render('signUpOrLogIn')
-	} 
-	jwt.verify(token, secret, function(err, decoded) {
-		if(decoded){
-			console.log('err: '+err)
-			console.log('username: '+decoded.username)
-			console.log('iat (issued at time)(UNIX time): '+decoded.iat)
-			console.log('expired: '+decoded.exp)
-			next()
-		}
-		else{
-			console.log('not passed')
-			res.render('signUpOrLogIn')
-		}
-	})
+const checkIfLoggedInAuth = (req, res, next)=>{
+	if (!req.user){
+		res.redirect('/auth/login')
+	}
+	else{
+		next()
+	}
 }
+
+router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
+	res.send('logged in as user no.' + req.user)
+})
+
+
 
 module.exports = router

@@ -4,11 +4,12 @@ const app = express()
 const mysql = require('mysql')
 const pug = require('pug')
 const path = require('path')
-const formidable = require('formidable')
 const request = require('request')
-const jwt = require("jsonwebtoken")
 const cookieParser = require('cookie-parser')
 const passportSetup = require('./config/passport-setup')
+const cookieSession = require('cookie-session')
+const keys = require('./config/keys')
+const passport = require('passport')
 
 // Set up
 app.set('view engine', 'pug')
@@ -20,11 +21,18 @@ app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/
 app.use("/DataTables", express.static(path.join(__dirname, "/DataTables")))
 app.use(cookieParser())
 
+app.use(cookieSession({
+	maxAge: 24*60*60*1000,
+	keys:[keys.session.cookieKey]
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+
 // Routes
 const usersRoute = require('./routes/users.js')
 app.use(usersRoute)
-const logInSignUpRoute = require('./routes/logInSignUp.js')
-app.use(logInSignUpRoute)
 const randomFilmsRoute = require('./routes/randomFilms.js')
 app.use(randomFilmsRoute)
 const galleryRoute = require('./routes/gallery.js')
@@ -52,43 +60,43 @@ let connection = mysql.createConnection({
 connection.connect()
 */
 
+function handleDisconnect() {
+let newConnection = mysql.createConnection({
+	host: 'eu-cdbr-west-03.cleardb.net',
+	user: 'bcc861a75b94d1',
+	password: '7a2672e3',
+	database: 'heroku_b301eebc16a43c7'
+})
 
-
-function handleDisconnect(conn) {
-	conn.on('error', function(err) {
-		if (!err.fatal) {
-			return
-		}
-
-		if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-			throw err
-		}
-
-		console.log('Re-connecting lost connection: ' + err.stack)
-
-		connection = mysql.createConnection(conn.config)
-		handleDisconnect(connection)
-		connection.connect()
-	})
+  newConnection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  newConnection.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
+    }
+  });
 }
-connection.connect()
-handleDisconnect(connection)
+
+handleDisconnect(connection);
 
 //home page
 app.route("/").get(function(req,res)
-{
+{	
+	console.log(req.user)
 	res.render('home', {pageName: 'Home'})
 })
 
-app.route("/oldHome").get(function(req,res)
-{
-	res.render('oldHome', {pageName: 'Home'})
-})
 
 
-
-
-app.listen(process.env.PORT || 80, function(){
+app.listen(process.env.PORT || 3000, function(){
 	console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env)
 })
 
