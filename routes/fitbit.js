@@ -28,9 +28,9 @@ router.route('/virtualMe').get(function(req, res){
 		console.log('fitbit')
 	})
 	*/
-	console.log('params: '+req.params)
-	console.log('params: '+req.params.access_token)
-	//console.log('keys: '+Object.keys(req.params))
+	// console.log('params: '+req.params)
+	// console.log('params: '+req.params.access_token)
+	// console.log('keys: '+Object.keys(req.params))
 })
 
 router.route('/connectFitbit').get(function(req,res){
@@ -76,6 +76,7 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		// activityArray = activityData.summary.steps
 		console.log("ACTIVITY STEPS: "+activityData.summary.steps)
 
+		console.log(req.user)
 		// check if logged in and get cookie
 		if(!req.query.loggedInCookie || req.query.loggedInCookie == 'token='){
 			console.log('req.query.loggedInCookie: '+req.query.loggedInCookie)
