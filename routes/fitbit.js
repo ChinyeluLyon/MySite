@@ -83,7 +83,7 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		}
 		else{
 			console.log('USER ID: '+req.user)
-			let insertDataSQL = 'INSERT IGNORE INTO new_users (user_id, recent_daily_steps) VALUES ("'+req.user+'", '+activityData.summary.steps+')'
+			let insertDataSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET recent_daily_steps = '+activityData.summary.steps+'  WHERE user_id = '+req.user+' '
 			console.log("insertDataSQL")
 			console.log(insertDataSQL)
 			connection.query(insertDataSQL, function(err, rows, fields){
