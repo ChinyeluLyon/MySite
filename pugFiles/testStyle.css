@@ -7,9 +7,10 @@ body{
 }
 
 a.authButtons {
-    float: right;
-    font-size: 2vmin;
-    z-index: 1;
+	float: right;
+	font-size: 2vmin;
+	z-index: 1;
+	padding: 1vmin;
 }
 
 .flex-container {
@@ -126,19 +127,19 @@ a:hover {
 }
 
 .button-center{
-    display: flex;
-    justify-content: center;
-    padding-top: 1vmin;
-    padding-bottom: 1vmin;
-    padding-right: 10vmin;
-    padding-left: 10vmin;
-    border-radius: 15vmin;
-    background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
-    margin-right: 25vw;
-    margin-left: 25vw;
-    font-size: 5vmin;
-    display: block;
-    text-align: center;
+	display: flex;
+	justify-content: center;
+	padding-top: 1vmin;
+	padding-bottom: 1vmin;
+	padding-right: 10vmin;
+	padding-left: 10vmin;
+	border-radius: 15vmin;
+	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
+	margin-right: 25vw;
+	margin-left: 25vw;
+	font-size: 5vmin;
+	display: block;
+	text-align: center;
 }
 
 /*slick gallery start*/
