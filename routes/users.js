@@ -95,7 +95,19 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 
 router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
 	// res.send('logged in as user no.' + req.user)
-	res.render('userProfile', { userNo: req.user })
+	let query = 'SELECT user_name, recent_daily_steps FROM new_users WHERE user_id = '+req.user
+	connection.query(query, function(err, rows, fields){
+		if (err) {
+			throw err
+			console.log('The solution is: ', rows[0].solution)
+		}
+		else{
+			res.render('userProfile', { 
+				userName: rows[0].user_name,
+				recentSteps: rows[0].recent_daily_steps
+			})
+		}
+	})
 })
 
 
