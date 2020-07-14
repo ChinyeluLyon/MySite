@@ -6,6 +6,12 @@ body{
 	background-color: #9A9A9A;
 }
 
+img.userImage{
+	border-radius: 50vmin;
+	width: 30vmin;
+	padding: 2vmin;
+}
+
 a.authButtons {
 	float: right;
 	font-size: 2vmin;

@@ -5,10 +5,9 @@ html(crossorigin="anonymous")
 
 script(src="/javaScript/bundle.js")
 
+img(class='userImage' src=userImage)
 h1 #{userName}'s Profile
 
-- var img =#{userImage}
-img(src=img)
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
@@ -23,8 +22,8 @@ script(type='text/javascript').
 				label: 'My Stats',
 				data: [#{recentSteps}, #{averageSteps}],
 				backgroundColor: [
-				'rgba(255, 99, 132, 0.2)',
-				'rgba(54, 162, 235, 0.2)'
+				'rgba(255, 99, 132, 0.5)',
+				'rgba(54, 162, 235, 0.5)'
 				],
 				borderColor: [
 				'rgba(255, 99, 132, 1)',
