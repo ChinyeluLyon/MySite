@@ -3,8 +3,6 @@ doctype html
 html
 	include Templates/newHeader.pug
 	
-a(href='/auth/google') google login
-
-
-
-
+div(class="googleWrapper")
+	img(class="googleIcon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg")
+	a(class="googleLinkText" href='/auth/google') Login With Google

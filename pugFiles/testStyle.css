@@ -6,6 +6,30 @@ body{
 	background-color: #9A9A9A;
 }
 
+.googleWrapper{
+	display: flex; 
+	justify-content:center;
+}
+
+.googleIcon{
+    width: 4vmin;
+    padding-right: 4vmin;
+    background-color: aliceblue;
+    padding-left: 4vmin;
+    border-bottom-left-radius: 3vmin;
+}
+
+.googleLinkText:hover {
+    text-decoration: none;
+    background-color: #c9d1da;
+}
+.googleLinkText{
+	background-color: aliceblue;
+    padding: 3vmin;
+    border-top-right-radius: 3vmin;
+    /*border-bottom-right-radius: 3vmin;*/
+}
+
 img.userImage{
 	border-radius: 50vmin;
 	width: 30vmin;
