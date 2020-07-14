@@ -7,7 +7,8 @@ script(src="/javaScript/bundle.js")
 
 h1 #{userName}'s Profile
 
-img(src='#{userImage}')
+- var img =#{userImage}
+img(src=img)
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
