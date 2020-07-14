@@ -7,7 +7,7 @@ script(src="/javaScript/bundle.js")
 
 h1 #{userName}'s Profile
 
-h2 You Have done #{recentSteps} steps today
+img(src=#{userImage})
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
@@ -17,10 +17,10 @@ script(type='text/javascript').
 	let myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
-			labels: ['Recent Steps', 'other data'],
+			labels: ['Recent Steps', 'Average Daily Steps'],
 			datasets: [{
 				label: 'My Stats',
-				data: [#{recentSteps}, 19],
+				data: [#{recentSteps}, #{averageSteps}],
 				backgroundColor: [
 				'rgba(255, 99, 132, 0.2)',
 				'rgba(54, 162, 235, 0.2)'

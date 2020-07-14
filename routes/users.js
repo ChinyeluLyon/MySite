@@ -95,7 +95,7 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 
 router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
 	console.log(req)
-	let query = 'SELECT user_name, recent_daily_steps FROM new_users WHERE user_id = '+req.user
+	let query = 'SELECT user_name, recent_daily_steps, average_daily_steps, user_image_url FROM new_users WHERE user_id = '+req.user
 	connection.query(query, function(err, rows, fields){
 		if (err) {
 			throw err
@@ -104,7 +104,9 @@ router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
 		else{
 			res.render('userProfile', { 
 				userName: rows[0].user_name,
-				recentSteps: rows[0].recent_daily_steps
+				recentSteps: rows[0].recent_daily_steps,
+				averageSteps: rows[0].average_daily_steps,
+				userImage: rows[0].user_image_url
 			})
 		}
 	})

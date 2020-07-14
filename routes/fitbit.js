@@ -50,7 +50,17 @@ router.post('/requestFitbit', function(req, res){
 	}, function (err, res, body) {
 		let userData = JSON.parse(body)
 		// console.log('keys: '+Object.keys(userData.user))
-		console.log('DATA: '+userData.user)
+		console.log('DATA: ')
+		console.log(userData)
+
+		let updateAverageStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+req.user
+		connection.query(updateAverageStepsSQL, function(err, rows, fields){
+			if(err){
+				throw err
+			}else{
+				console.log('Average Daily Steps updated')
+			}
+		})
 	})
 })
 
@@ -60,8 +70,7 @@ router.get('/getFitbitActivitiesData', function(req, res){
 	console.log("dateNow: "+dateNow)
 	console.log("AT: "+req.query.accessToken)
 	let activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json'
-	// GET https://api.fitbit.com/1/user/[user-id]/activities/date/[date].json
-	// GET https://api.fitbit.com/1/user/7R9QCG/activities/date/2020-06-15.json
+
 	let activityArray = []
 	request({
 		headers: {
@@ -73,35 +82,28 @@ router.get('/getFitbitActivitiesData', function(req, res){
 		console.log("activityData:")
 		console.log(activityData.summary)
 		console.log("ACTIVITY keys: "+Object.keys(activityData.summary))
-		// activityArray = activityData.summary.steps
+
 		console.log("ACTIVITY STEPS: "+activityData.summary.steps)
 
-		// check if logged in and get cookie
+		// check if logged in
 		if(!req.user){
 			console.log('not logged In')
 			console.log('not added to db')
 		}
 		else{
 			console.log('USER ID: '+req.user)
-			let insertDataSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET recent_daily_steps = '+activityData.summary.steps+'  WHERE user_id = '+req.user+' '
-			console.log("insertDataSQL")
-			console.log(insertDataSQL)
-			connection.query(insertDataSQL, function(err, rows, fields){
+			let updateRecentStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET recent_daily_steps = '+activityData.summary.steps+'  WHERE user_id = '+req.user
+			console.log("updateRecentStepsSQL")
+			console.log(updateRecentStepsSQL)
+			connection.query(updateRecentStepsSQL, function(err, rows, fields){
 				if(err){
 					throw err
 				}else{
-					console.log('TODO BIEN')
+					console.log('Recent Steps Updated')
 				}
 			})
 		}
-
-
-
 	})
-
-	// res.json({
-	// 	activitySummary: activityArray
-	// })
 })
 
 async function runOauth2(res) {
