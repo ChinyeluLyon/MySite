@@ -41,6 +41,7 @@ router.route('/connectFitbit').get(function(req,res){
 
 router.post('/requestFitbit', function(req, res){
 	let fitbitUserId = req.body.fitbitUserId
+	let fitbitAccessToken = req.body.fitbitAccToken
 	console.log('user id: '+ fitbitUserId)
 	request({
 		headers: {
@@ -53,7 +54,7 @@ router.post('/requestFitbit', function(req, res){
 		console.log('DATA: ')
 		console.log(userData)
 
-		let updateAverageStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+req.user
+		let updateAverageStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET fitbit_user_id = "'+fitbitUserId+'", fitbit_access_token = "'+fitbitAccessToken+'", average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+req.user
 		connection.query(updateAverageStepsSQL, function(err, rows, fields){
 			if(err){
 				throw err
@@ -64,6 +65,64 @@ router.post('/requestFitbit', function(req, res){
 	})
 })
 
+
+router.get('/getAll', function(req,res){
+	let dateNow = new Date().toISOString().slice(0,10)
+	console.log("dateNow: "+dateNow)
+	// get access token
+	getFitbitAccessTokenSQL = 'SELECT fitbit_access_token FROM heroku_b301eebc16a43c7.new_users WHERE user_id = '+req.user
+	connection.query(getFitbitAccessTokenSQL, function(err, rows, fields){
+		if(err){
+			throw err
+		}else{
+			// if have acc token then do request
+			if(rows[0].fitbit_access_token){
+				console.log('Acc Token: '+rows[0].fitbit_access_token)
+				request({
+					headers: {
+						'Authorization': 'Bearer '+rows[0].fitbit_access_token
+					},
+					uri: 'https://api.fitbit.com/1/user/-/profile.json'
+				}, function (err, res, body) {
+					let userData = JSON.parse(body)
+					console.log('AVG Daily Steps: '+ userData.user.averageDailySteps)
+					// update all values
+					let updateAverageStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+req.user
+					connection.query(updateAverageStepsSQL, function(err, rows, fields){
+						if(err){
+							throw err
+						}else{
+							console.log('Average Daily Steps updated')
+						}
+					})
+				})
+				// second query
+				let dateNow = new Date().toISOString().slice(0,10)
+				let activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json'
+				request({
+					headers: {
+						'Authorization': 'Bearer '+rows[0].fitbit_access_token
+					},
+					uri: activitiesURL
+				}, function (err, res, body) {
+					let activityData = JSON.parse(body)
+					let updateRecentStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET recent_daily_steps = '+activityData.summary.steps+'  WHERE user_id = '+req.user
+					connection.query(updateRecentStepsSQL, function(err, rows, fields){
+						if(err){
+							throw err
+						}else{
+							console.log('Recent Steps Updated')
+						}
+					})
+				})
+			}
+			else{
+				console.log('nahh mate')
+				res.send('You need to sign in with fitbit')
+			}
+		}
+	})
+})
 
 router.get('/getFitbitActivitiesData', function(req, res){
 	let dateNow = new Date().toISOString().slice(0,10)

@@ -8,19 +8,15 @@ html
 table(id="sortableTable" align='center' class="display")
 	thead
 		tr
-			th User ID
 			th Name
-			th Age
-			th Gender
-			th(class='editColumn')
+			th Recent Steps
+			th Avg. Steps
+
 	each val in usersArr
 			tr
-				td= val.user_id
 				td= val.user_name
-				td= val.user_age
-				td= val.user_gender
-				td(class='editColumn') 
-					a(href='/users/'+val.user_id) editIcon
+				td= val.recent_daily_steps
+				td= val.average_daily_steps
 
 - } else{ 
 h2 no users

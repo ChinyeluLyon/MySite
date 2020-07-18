@@ -58,8 +58,8 @@ function getUserId(userName, email, profileImageUrl, callback){
 passport.use(new GoogleStrategy({
 	clientID: keys.google.clientID,
 	clientSecret: keys.google.clientSecret,
-		callbackURL: 'https://chinyelu.herokuapp.com/auth/google/redirect'
-		// callbackURL: 'http://localhost:5000/auth/google/redirect'
+		// callbackURL: 'https://chinyelu.herokuapp.com/auth/google/redirect'
+		callbackURL: 'http://localhost:5000/auth/google/redirect'
 	}, (accessToken, refreshToken, profile, email, done)=>{
 		// passport callback function
 		console.log('passport callback!!')

@@ -11,21 +11,13 @@ const connection = mysql.createConnection({
 
 router.route("/users").get(function(req,res)
 {
-	let sqlQuery = 'SELECT * FROM users'
+	let sqlQuery = 'SELECT * FROM new_users'
 	connection.query(sqlQuery, function (err, rows, fields) {
 		if (err) {
 			throw err
 			console.log('The solution is: ', rows[0].solution)
 		}
 		else{
-
-			for(let i=0; i < rows.length; i++){
-				let nowDate = new Date()
-				let dateDiff = new Date(nowDate - rows[i].user_DOB)
-				let age = dateDiff.getUTCFullYear() - 1970
-				rows[i].user_age = age
-			}
-
 			res.render('allUsers', {
 				pageName: 'All Users',
 				usersArr: rows
@@ -48,8 +40,7 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 }
 
 router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
-	console.log(req)
-	let query = 'SELECT user_name, recent_daily_steps, average_daily_steps, user_image_url FROM new_users WHERE user_id = '+req.user
+	let query = 'SELECT user_name, recent_daily_steps, average_daily_steps, user_image_url, fitbit_user_id, fitbit_access_token FROM new_users WHERE user_id = '+req.user
 	connection.query(query, function(err, rows, fields){
 		if (err) {
 			throw err
@@ -60,7 +51,9 @@ router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
 				userName: rows[0].user_name,
 				recentSteps: rows[0].recent_daily_steps,
 				averageSteps: rows[0].average_daily_steps,
-				userImage: rows[0].user_image_url
+				userImage: rows[0].user_image_url,
+				fitbitId: rows[0].fitbit_user_id,
+				fitbitAccessToken: rows[0].fitbit_access_token
 			})
 		}
 	})

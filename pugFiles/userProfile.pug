@@ -8,6 +8,8 @@ script(src="/javaScript/bundle.js")
 img(class='userImage' src=userImage)
 h1 #{userName}'s Profile
 
+button(class='refresh') Refresh Fitbit Data
+
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
@@ -42,6 +44,15 @@ script(type='text/javascript').
 			}
 		}
 	});
+
+
+	$('.refresh').click(function(){
+		$.get('/getAll', null, function(data, status){
+			if(confirm(data)){
+				location.href = '/connectFitbit'
+			}
+		})
+	})
 
 
 
