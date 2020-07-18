@@ -43,12 +43,12 @@ const authRoutes = require('./routes/auth')
 app.use('/auth',authRoutes)
 
 //Connect to database
-let connection = mysql.createConnection({
-	host: 'eu-cdbr-west-03.cleardb.net',
-	user: 'bcc861a75b94d1',
-	password: '7a2672e3',
-	database: 'heroku_b301eebc16a43c7'
-})
+// let connection = mysql.createConnection({
+// 	host: 'eu-cdbr-west-03.cleardb.net',
+// 	user: 'bcc861a75b94d1',
+// 	password: '7a2672e3',
+// 	database: 'heroku_b301eebc16a43c7'
+// })
 
 /*
 let connection = mysql.createConnection({
@@ -61,36 +61,36 @@ connection.connect()
 */
 
 
-let newConn;
+// let newConn;
 
-function handleDisconnect() {
-	newConn = mysql.createConnection(mysql.createConnection({
-		host: 'eu-cdbr-west-03.cleardb.net',
-		user: 'bcc861a75b94d1',
-		password: '7a2672e3',
-		database: 'heroku_b301eebc16a43c7'
-	}))
+// function handleDisconnect() {
+// 	newConn = mysql.createConnection(mysql.createConnection({
+// 		host: 'eu-cdbr-west-03.cleardb.net',
+// 		user: 'bcc861a75b94d1',
+// 		password: '7a2672e3',
+// 		database: 'heroku_b301eebc16a43c7'
+// 	}))
 
 
 
-	newConn.connect(function(err) {              
-		if(err) {      
-			// console.log('in here')                              
-			// console.log('error when connecting to db:', err);
-			setTimeout(handleDisconnect, 2000); 
-		}                                     
-	});                                   
-	newConn.on('error', function(err) {
-		// console.log('db error', err);
-		if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-			handleDisconnect();                         
-		} else {                                     
-			throw err;
-		}
-	});
-}
+// 	newConn.connect(function(err) {              
+// 		if(err) {      
+// 			// console.log('in here')                              
+// 			// console.log('error when connecting to db:', err);
+// 			setTimeout(handleDisconnect, 2000); 
+// 		}                                     
+// 	});                                   
+// 	newConn.on('error', function(err) {
+// 		// console.log('db error', err);
+// 		if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+// 			handleDisconnect();                         
+// 		} else {                                     
+// 			throw err;
+// 		}
+// 	});
+// }
 
-handleDisconnect();
+// handleDisconnect();
 
 
 
