@@ -44,12 +44,12 @@ script(type='text/javascript').
 
 
 
-	//- $.get('/getAll', null, function(data, status){
-	//- 	if(confirm(data)){
-	//- 		location.href = '/loginToFitbit'
-	//- 		//- location.href = '/connectFitbit'
-	//- 	}
-	//- })
+	$.get('/getAll', null, function(data, status){
+		if(confirm(data)){
+			location.href = '/loginToFitbit'
+			//- location.href = '/connectFitbit'
+		}
+	})
 
 	let searchParams = window.location.search
 	let indexEq = searchParams.indexOf('=')
