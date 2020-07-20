@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser')
 const passportSetup = require('./config/passport-setup')
 const cookieSession = require('cookie-session')
 const keys = require('./config/keys')
+const localKeys = require('./config/localKeys')
 const passport = require('passport')
 
 // Set up
@@ -21,9 +22,12 @@ app.use("/slick", express.static(path.join(__dirname, "/slick-1.8.1/slick-1.8.1/
 app.use("/DataTables", express.static(path.join(__dirname, "/DataTables")))
 app.use(cookieParser())
 
+// to test locally go to passport-setup.js and uncomment local lines and comment public lines
+// also change index.js to use local instead of public 
 app.use(cookieSession({
 	maxAge: 24*60*60*1000,
 	keys:[keys.session.cookieKey]
+	// keys:[localKeys.session.cookieKey]
 }))
 
 app.use(passport.initialize())

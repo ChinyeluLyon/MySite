@@ -1,18 +1,13 @@
-const mysql = require('mysql')
 const pug = require('pug')
 const express = require('express')
 const router = express.Router()
-const connection = mysql.createConnection({
-	host: 'eu-cdbr-west-03.cleardb.net',
-	user: 'bcc861a75b94d1',
-	password: '7a2672e3',
-	database: 'heroku_b301eebc16a43c7'
-})
+
+let db = require('../database');
 
 router.route("/users").get(function(req,res)
 {
 	let sqlQuery = 'SELECT * FROM new_users'
-	connection.query(sqlQuery, function (err, rows, fields) {
+	db.query(sqlQuery, function (err, rows, fields) {
 		if (err) {
 			throw err
 			console.log('The solution is: ', rows[0].solution)
@@ -41,7 +36,9 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 
 router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
 	let query = 'SELECT user_name, recent_daily_steps, average_daily_steps, user_image_url, fitbit_user_id, fitbit_access_token FROM new_users WHERE user_id = '+req.user
-	connection.query(query, function(err, rows, fields){
+	console.log('USER PROFILE QUERY: ')
+	console.log(query)
+	db.query(query, function(err, rows, fields){
 		if (err) {
 			throw err
 			console.log('The solution is: ', rows[0].solution)
@@ -59,5 +56,5 @@ router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
 	})
 })
 
-
+// connection.end()
 module.exports = router

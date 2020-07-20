@@ -1,5 +1,4 @@
 // AUTH USING passport.js
-const mysql = require('mysql')
 const pug = require('pug')
 const express = require('express')
 const router = express.Router()
@@ -27,6 +26,7 @@ router.get("/google", passport.authenticate('google', {
 router.get("/google/redirect", passport.authenticate('google'), (req,res)=>{
 	// res.send(req.user.user_name +" user email = "+ req.user.user_email)
 	res.redirect('/userProfile/')
+	// res.send(req.user)
 })
 
 
