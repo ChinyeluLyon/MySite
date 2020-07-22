@@ -18,6 +18,7 @@ function addGoogleUserDataToDb(userName, email, profileImageUrl){
 	new_users (user_name, user_email, user_image_url) \
 	VALUES ("'+userName+'", "'+email+'", "'+profileImageUrl+'")\
 	'
+	console.log(sqlQuery)
 	db.query(sqlQuery, function (err, rows, fields) {
 		if (err) {
 			throw err

@@ -62,40 +62,98 @@ router.post('/requestFitbit', function(req, res){
 })
 
 router.route('/getCode').get(function(req,res){
-	let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
-	// let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BTWW&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
+	// comment for public or local
+	// let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
+	let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BTWW&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
+	console.log('getCode redirecting to '+ authUrl)
 	res.redirect(authUrl)
 })
+
+
 
 router.post('/getAllTokens', function(req,res){
 	console.log('***** IN GET ALL TOKENS *****')
 	console.log(req.body.code)
 	let code = req.body.code
-	// let tokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=http://localhost:5000/userProfile'
-	let tokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=https://chinyelu.herokuapp.com/userProfile'
+	// comment for public or local
+	// let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=https://chinyelu.herokuapp.com/userProfile'
+	let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=http://localhost:5000/userProfile'
+	console.log('getTokenUrl: '+getTokenUrl)
+	let tokenJSON = ''
+
 	request({
-		method: 'POST',
 		headers: {
 			'Authorization': 'Basic MjJCVFdXOjI5NGFmODc1ODg1NmQ0OTBjZTVmY2I4MWY3ZWEwZmZl',
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
-		uri: tokenUrl
+		uri: getTokenUrl,
+		method: 'POST'
 	}, function (err, res, body) {
-		let tokenJSON = JSON.parse(body)
+		console.log(body)
+		tokenJSON = JSON.parse(body)
+		console.log('JSON: ')
+		console.log(tokenJSON)
+
 		let saveTokensSQL = 'UPDATE new_users SET fitbit_access_token = "'+tokenJSON.access_token+'", fitbit_refresh_token = "'+tokenJSON.refresh_token+'" WHERE user_id = '+req.user
+		console.log(saveTokensSQL)
 		db.query(saveTokensSQL, function(err, rows, fields){
 			if(err){
 				throw err
 			}else{
 				console.log('Tokens Updated')
+				updateAvgDailySteps(tokenJSON.access_token, req.user)
+				updateRecentSteps(tokenJSON.access_token, req.user)
+			}
+		})
+	})
+})
+
+function updateAvgDailySteps(accessToken, userId){
+	request({
+		headers: {
+			'Authorization': 'Bearer '+accessToken
+		},
+		uri: 'https://api.fitbit.com/1/user/-/profile.json'
+	}, function (err, res, body) {
+		let userData = JSON.parse(body)
+		console.log('AVG Daily Steps: '+ userData.user.averageDailySteps)
+		// update all values
+		let updateAverageStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+userId
+		db.query(updateAverageStepsSQL, function(err, rows, fields){
+			if(err){
+				throw err
+			}else{
+				console.log('Average Daily Steps updated')
 			}
 		})
 	})
 
-})
+}
 
+function updateRecentSteps(accessToken, userId){
+	let dateNow = new Date().toISOString().slice(0,10)
+	let activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json'
+	request({
+		headers: {
+			'Authorization': 'Bearer '+accessToken
+		},
+		uri: activitiesURL
+	}, function (err, res, body) {
+		let activityData = JSON.parse(body)
+
+		let updateRecentStepsSQL = 'UPDATE new_users SET recent_daily_steps = '+activityData.summary.steps+', calories_out = '+activityData.summary.caloriesOut+', floors = '+activityData.summary.floors+'  WHERE user_id = '+userId
+		db.query(updateRecentStepsSQL, function(err, rows, fields){
+			if(err){
+				throw err
+			}else{
+				console.log('Recent Steps Updated')
+			}
+		})
+	})
+}
 
 router.get('/getAll', function(req,res){
+	console.log('************* IN GET ALL **************')
 	let dateNow = new Date().toISOString().slice(0,10)
 	console.log("dateNow: "+dateNow)
 	// get access token
@@ -106,6 +164,7 @@ router.get('/getAll', function(req,res){
 		}else{
 			// if have acc token then do request
 			if(rows[0].fitbit_access_token){
+				console.log(getFitbitAccessTokenSQL)
 				console.log('Acc Token: '+rows[0].fitbit_access_token)
 				request({
 					headers: {
@@ -135,7 +194,7 @@ router.get('/getAll', function(req,res){
 					uri: activitiesURL
 				}, function (err, res, body) {
 					let activityData = JSON.parse(body)
-					let updateRecentStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET recent_daily_steps = '+activityData.summary.steps+'  WHERE user_id = '+req.user
+					let updateRecentStepsSQL = 'UPDATE new_users SET recent_daily_steps = '+activityData.summary.steps+'  WHERE user_id = '+req.user
 					db.query(updateRecentStepsSQL, function(err, rows, fields){
 						if(err){
 							throw err
@@ -198,11 +257,11 @@ async function runOauth2(res) {
 	const credentials = {
 		client: {
 			// public
-			id: '22BQRF',
-			secret: 'eaf4e976d0d88f3f7d9e8f8813bf151b'
+			// id: '22BQRF',
+			// secret: 'eaf4e976d0d88f3f7d9e8f8813bf151b'
 			// local
-			// id: '22BTWW',
-			// secret: '294af8758856d490ce5fcb81f7ea0ffe'
+			id: '22BTWW',
+			secret: '294af8758856d490ce5fcb81f7ea0ffe'
 		},
 		auth: {
 			tokenHost: 'https://www.fitbit.com'

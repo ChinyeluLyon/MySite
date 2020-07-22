@@ -7,63 +7,74 @@ script(src="/javaScript/bundle.js")
 
 img(class='userImage' src=userImage)
 h1 #{userName}'s Profile
+a(id='refreshButton' href='/getCode')
+	img(src='/uploads/refresh.png' style='width: 4vmin;')
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
 
 script(type='text/javascript').
 	let ctx = document.getElementById('myChart')
-	let myChart = new Chart(ctx, {
-		type: 'bar',
-		data: {
-			labels: ['Recent Steps', 'Average Daily Steps'],
-			datasets: [{
-				label: 'My Stats',
-				data: [#{recentSteps}, #{averageSteps}],
-				backgroundColor: [
-				'rgba(255, 99, 132, 0.5)',
-				'rgba(54, 162, 235, 0.5)'
-				],
-				borderColor: [
-				'rgba(255, 99, 132, 1)',
-				'rgba(54, 162, 235, 1)'
-				],
-				borderWidth: 1
-			}]
-		},
-		options: {
-			scales: {
-				yAxes: [{
-					ticks: {
-						beginAtZero: true
-					}
+		let myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ['Recent Steps', 'Average Daily Steps', 'Calories Out', 'Floors'],
+				datasets: [{
+					label: 'My Stats',
+					data: [#{recentSteps}, #{averageSteps}, #{caloriesOut}, #{floors}],
+					backgroundColor: [
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)',
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)'
+					],
+					borderColor: [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)'
+					],
+					borderWidth: 1
 				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				}
 			}
-		}
-	});
+		});
 
 
 
-	$.get('/getAll', null, function(data, status){
-		if(confirm(data)){
-			location.href = '/loginToFitbit'
-			//- location.href = '/connectFitbit'
-		}
-	})
+	
 
 	let searchParams = window.location.search
 	let indexEq = searchParams.indexOf('=')
 	let fitbitCode = searchParams.slice(indexEq+1)
-	if(fitbitCode){
-		debugger
-		$.post('/getAllTokens',{
-			code: fitbitCode
-		},
-		function(data, status){
-			alert('We Okay')
-		})
-	}
 
+	$('#refreshButton').click(function(){
+		if(fitbitCode){
+			debugger
+			$.post('/getAllTokens',{
+				code: fitbitCode
+			},
+			function(data, status){
+				alert('We Okay')
+			})
+		}
+	})
+
+
+	//- $.get('/getAll', null, function(data, status){
+	//- 	if(confirm(data)){
+	//- 		location.href = '/loginToFitbit'
+	//- 		//- location.href = '/connectFitbit'
+	//- 	}
+	//- })
  
 
 	//- let hashData = window.location.hash 

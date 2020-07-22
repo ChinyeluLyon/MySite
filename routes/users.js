@@ -35,7 +35,7 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 }
 
 router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
-	let query = 'SELECT user_name, recent_daily_steps, average_daily_steps, user_image_url, fitbit_user_id, fitbit_access_token FROM new_users WHERE user_id = '+req.user
+	let query = 'SELECT * FROM new_users WHERE user_id = '+req.user
 	console.log('USER PROFILE QUERY: ')
 	console.log(query)
 	db.query(query, function(err, rows, fields){
@@ -44,10 +44,13 @@ router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
 			console.log('The solution is: ', rows[0].solution)
 		}
 		else{
+			console.log(rows[0])
 			res.render('userProfile', { 
 				userName: rows[0].user_name,
 				recentSteps: rows[0].recent_daily_steps,
 				averageSteps: rows[0].average_daily_steps,
+				caloriesOut: rows[0].calories_out,
+				floors: rows[0].floors,
 				userImage: rows[0].user_image_url,
 				fitbitId: rows[0].fitbit_user_id,
 				fitbitAccessToken: rows[0].fitbit_access_token
