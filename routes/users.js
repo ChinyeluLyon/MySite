@@ -1,7 +1,6 @@
 const pug = require('pug')
 const express = require('express')
 const router = express.Router()
-
 let db = require('../database');
 
 router.route("/users").get(function(req,res)

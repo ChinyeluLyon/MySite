@@ -32,7 +32,7 @@ function addGoogleUserDataToDb(userName, email, profileImageUrl){
 
 function getUserId(userName, email, profileImageUrl, callback){
 	let sqlQuery = 'SELECT * FROM new_users WHERE user_name = "'+userName+'" AND user_email = "'+email+'" AND  user_image_url = "'+profileImageUrl+'" '
-	console.log(sqlQuery)
+	// console.log(sqlQuery)
 	db.query(sqlQuery, function (err, rows, fields) {
 		if (err) {
 			throw err
@@ -54,13 +54,13 @@ function getUserId(userName, email, profileImageUrl, callback){
 // to test locally go to passport-setup.js and uncomment local lines and comment public lines
 // also change index.js to use local instead of public 
 passport.use(new GoogleStrategy({
-	// clientID: localKeys.google.clientID,
-	clientID: keys.google.clientID,
-	// clientSecret: localKeys.google.clientSecret,
-	clientSecret: keys.google.clientSecret,
-	// callbackURL: 'http://localhost:5000/auth/google/redirect'
-	callbackURL: 'https://chinyelu.herokuapp.com/auth/google/redirect'
-	}, (accessToken, refreshToken, profile, email, done)=>{
+	clientID: localKeys.google.clientID,
+	// clientID: keys.google.clientID,
+	clientSecret: localKeys.google.clientSecret,
+	// clientSecret: keys.google.clientSecret,
+	callbackURL: 'http://localhost:5000/auth/google/redirect'
+	// callbackURL: 'https://chinyelu.herokuapp.com/auth/google/redirect'
+}, (accessToken, refreshToken, profile, email, done)=>{
 		// passport callback function
 		console.log('passport callback!!')
 		if (email._json.email_verified == true) {

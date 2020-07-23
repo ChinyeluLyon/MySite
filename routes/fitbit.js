@@ -182,7 +182,7 @@ router.get('/getAll', function(req,res){
 						}else{
 							console.log('Average Daily Steps updated')
 						}
-					})
+								})
 				})
 				// second query
 				let dateNow = new Date().toISOString().slice(0,10)
@@ -201,7 +201,7 @@ router.get('/getAll', function(req,res){
 						}else{
 							console.log('Recent Steps Updated')
 						}
-					})
+								})
 				})
 			}
 			else{
@@ -248,7 +248,7 @@ router.get('/getFitbitActivitiesData', function(req, res){
 				}else{
 					console.log('Recent Steps Updated')
 				}
-			})
+				})
 		}
 	})
 })

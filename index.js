@@ -11,6 +11,8 @@ const cookieSession = require('cookie-session')
 const keys = require('./config/keys')
 const localKeys = require('./config/localKeys')
 const passport = require('passport')
+const db = require('./database');
+
 
 // Set up
 app.set('view engine', 'pug')
@@ -26,23 +28,35 @@ app.use(cookieParser())
 // also change index.js to use local instead of public 
 app.use(cookieSession({
 	maxAge: 24*60*60*1000,
-	keys:[keys.session.cookieKey]
-	// keys:[localKeys.session.cookieKey]
+	// keys:[keys.session.cookieKey]
+	keys:[localKeys.session.cookieKey]
 }))
 
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 // Routes
+const homeRoutes = require('./routes/home')
+app.use(homeRoutes)
+
 const usersRoute = require('./routes/users.js')
 app.use(usersRoute)
+
 const randomFilmsRoute = require('./routes/randomFilms.js')
 app.use(randomFilmsRoute)
+
 const galleryRoute = require('./routes/gallery.js')
 app.use(galleryRoute)
-const usersfitbitRoute = require('./routes/fitbit.js')
-app.use(usersfitbitRoute)
+
+const fitbitRoute = require('./routes/fitbit.js')
+app.use(fitbitRoute)
+
+const newUsersfitbitRoute = require('./routes/fitbit.js')
+app.use(newUsersfitbitRoute)
+
+const newfitbitRoute = require('./routes/fitbit.js')
+app.use(newfitbitRoute)
+
 const authRoutes = require('./routes/auth')
 app.use('/auth',authRoutes)
 
@@ -100,11 +114,7 @@ connection.connect()
 
 
 //home page
-app.route("/").get(function(req,res)
-{	
-	console.log(req.user)
-	res.render('home', {pageName: 'Home'})
-})
+
 
 
 
