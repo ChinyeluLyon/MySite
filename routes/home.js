@@ -1,7 +1,7 @@
 const pug = require('pug')
 const express = require('express')
 const router = express.Router()
-let db = require('../database')
+let pool = require('../database')
 
 router.route("/").get(function(req,res)
 {	
@@ -9,23 +9,17 @@ router.route("/").get(function(req,res)
 	if(req.user)
 	{
 		console.log('logged in')
-		let getUserImageSQL = 'SELECT user_image_url from new_users WHERE user_id = '+req.user
 
-		db.query(getUserImageSQL, function (err, rows, fields) {
-			if (err) {
-				throw err
-				console.log('The solution is: ', rows[0].solution)
-			}
-			else{
-				console.log('Query Successful!')
-				res.render('home', 
-				{
-					pageName: 'Home',
-					userID: req.user,
-					userImage: rows[0].user_image_url
-				})
-			}			
+		let getUserImageSQL = 'SELECT user_image_url from new_users WHERE user_id = '+req.user+' LIMIT 1'
+		pool.useMysqlPool(getUserImageSQL, function(rows){
+			res.render('home', 
+			{
+				pageName: 'Home',
+				userID: req.user,
+				userImage: rows[0].user_image_url
+			})
 		})
+
 	}
 	else{
 		res.render('home', 
@@ -34,5 +28,6 @@ router.route("/").get(function(req,res)
 		})
 	}
 })
+
 
 module.exports = router
