@@ -33,79 +33,24 @@ app.use(cookieSession({
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 // Routes
+const homeRoutes = require('./routes/home')
+app.use(homeRoutes)
+
 const usersRoute = require('./routes/users.js')
 app.use(usersRoute)
+
 const randomFilmsRoute = require('./routes/randomFilms.js')
 app.use(randomFilmsRoute)
+
 const galleryRoute = require('./routes/gallery.js')
 app.use(galleryRoute)
-const usersfitbitRoute = require('./routes/fitbit.js')
-app.use(usersfitbitRoute)
+
+const infoPagesRoutes = require('./routes/infoPages.js')
+app.use(infoPagesRoutes)
+
 const authRoutes = require('./routes/auth')
 app.use('/auth',authRoutes)
-
-//Connect to database
-// let connection = mysql.createConnection({
-// 	host: 'eu-cdbr-west-03.cleardb.net',
-// 	user: 'bcc861a75b94d1',
-// 	password: '7a2672e3',
-// 	database: 'heroku_b301eebc16a43c7'
-// })
-
-/*
-let connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'root',
-	database: 'testdb'
-})
-connection.connect()
-*/
-
-
-// let newConn;
-
-// function handleDisconnect() {
-// 	newConn = mysql.createConnection(mysql.createConnection({
-// 		host: 'eu-cdbr-west-03.cleardb.net',
-// 		user: 'bcc861a75b94d1',
-// 		password: '7a2672e3',
-// 		database: 'heroku_b301eebc16a43c7'
-// 	}))
-
-
-
-// 	newConn.connect(function(err) {              
-// 		if(err) {      
-// 			// console.log('in here')                              
-// 			// console.log('error when connecting to db:', err);
-// 			setTimeout(handleDisconnect, 2000); 
-// 		}                                     
-// 	});                                   
-// 	newConn.on('error', function(err) {
-// 		// console.log('db error', err);
-// 		if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-// 			handleDisconnect();                         
-// 		} else {                                     
-// 			throw err;
-// 		}
-// 	});
-// }
-
-// handleDisconnect();
-
-
-
-
-//home page
-app.route("/").get(function(req,res)
-{	
-	console.log(req.user)
-	res.render('home', {pageName: 'Home'})
-})
-
 
 
 app.listen(process.env.PORT || 3000, function(){

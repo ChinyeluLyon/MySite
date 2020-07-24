@@ -7,8 +7,11 @@ script(src="/javaScript/bundle.js")
 
 img(class='userImage' src=userImage)
 h1 #{userName}'s Profile
+<<<<<<< HEAD
 a(id='refreshButton' href='/getCode')
 	img(src='/uploads/refresh.png' style='width: 4vmin;')
+=======
+>>>>>>> origin/master
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
@@ -49,13 +52,17 @@ script(type='text/javascript').
 		});
 
 
+<<<<<<< HEAD
 
 	
 
+=======
+>>>>>>> origin/master
 	let searchParams = window.location.search
 	let indexEq = searchParams.indexOf('=')
 	let fitbitCode = searchParams.slice(indexEq+1)
 
+<<<<<<< HEAD
 	$('#refreshButton').click(function(){
 		if(fitbitCode){
 			debugger
@@ -99,6 +106,8 @@ script(type='text/javascript').
 	//- 		alert('sent')
 	//- 	})
 	//- }
+=======
+>>>>>>> origin/master
 
 
 

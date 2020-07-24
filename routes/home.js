@@ -11,6 +11,7 @@ router.route("/").get(function(req,res)
 		console.log('logged in')
 		console.log('DEBUG RECENT UPDATE')
 
+
 		let getUserImageSQL = 'SELECT user_image_url from new_users WHERE user_id = '+req.user+' LIMIT 1'
 		pool.useMysqlPool(getUserImageSQL, function(rows){
 			res.render('home', 
