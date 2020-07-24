@@ -6,10 +6,41 @@ body{
 	background-color: #9A9A9A;
 }
 
+.googleWrapper{
+	display: flex; 
+	justify-content:center;
+}
+
+.googleIcon{
+    width: 4vmin;
+    padding-right: 4vmin;
+    background-color: aliceblue;
+    padding-left: 4vmin;
+    border-bottom-left-radius: 3vmin;
+}
+
+.googleLinkText:hover {
+    text-decoration: none;
+    background-color: #c9d1da;
+}
+.googleLinkText{
+	background-color: aliceblue;
+    padding: 3vmin;
+    border-top-right-radius: 3vmin;
+    /*border-bottom-right-radius: 3vmin;*/
+}
+
+img.userImage{
+	border-radius: 50vmin;
+	width: 30vmin;
+	padding: 2vmin;
+}
+
 a.authButtons {
-    float: right;
-    font-size: 2vmin;
-    z-index: 1;
+	float: right;
+	font-size: 2vmin;
+	z-index: 1;
+	padding: 1vmin;
 }
 
 .flex-container {
@@ -126,19 +157,19 @@ a:hover {
 }
 
 .button-center{
-    display: flex;
-    justify-content: center;
-    padding-top: 1vmin;
-    padding-bottom: 1vmin;
-    padding-right: 10vmin;
-    padding-left: 10vmin;
-    border-radius: 15vmin;
-    background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
-    margin-right: 25vw;
-    margin-left: 25vw;
-    font-size: 5vmin;
-    display: block;
-    text-align: center;
+	display: flex;
+	justify-content: center;
+	padding-top: 1vmin;
+	padding-bottom: 1vmin;
+	padding-right: 10vmin;
+	padding-left: 10vmin;
+	border-radius: 15vmin;
+	background: linear-gradient(135.24deg, #FF0000 1.1%, #EB00FF 94.05%);
+	margin-right: 25vw;
+	margin-left: 25vw;
+	font-size: 5vmin;
+	display: block;
+	text-align: center;
 }
 
 /*slick gallery start*/

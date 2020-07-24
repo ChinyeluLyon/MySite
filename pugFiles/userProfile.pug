@@ -1,0 +1,58 @@
+doctype html
+
+html(crossorigin="anonymous")
+	include Templates/newHeader.pug
+
+script(src="/javaScript/bundle.js")
+
+img(class='userImage' src=userImage)
+h1 #{userName}'s Profile
+
+div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
+	canvas(id="myChart")
+
+script(type='text/javascript').
+	let ctx = document.getElementById('myChart')
+		let myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ['Recent Steps', 'Average Daily Steps', 'Calories Out', 'Floors'],
+				datasets: [{
+					label: 'My Stats',
+					data: [#{recentSteps}, #{averageSteps}, #{caloriesOut}, #{floors}],
+					backgroundColor: [
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)',
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)'
+					],
+					borderColor: [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				}
+			}
+		});
+
+
+	let searchParams = window.location.search
+	let indexEq = searchParams.indexOf('=')
+	let fitbitCode = searchParams.slice(indexEq+1)
+
+
+
+
+
+

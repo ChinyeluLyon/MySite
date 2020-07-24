@@ -11,18 +11,19 @@ style
 	include testStyle.css
 
 h1(id="homePageTitle") CHINYELU
-	a(class="authButtons" href='/auth/login') Log In 
-	a(class="authButtons") /
+	img(class='userImageTopBar' src=userImage style="border-radius: 10vmin; width:4vmin;")
+	a(class="authButtons notLoggedIn" href='/auth/login') Log In 
+	a(class="authButtons notLoggedIn") /
 	a(class="authButtons" href='/auth/logout') Log Out
 	ul(class="home-list")
+		//- li
+		//- 	a(href="/loginToFitbit") Fitbit Project
+		//- li
+		//- 	a(href="/gallery") My Gallery
+		//- li
+		//- 	a(href="/randomFilm") Random Films Project
 		li
-			a(href="/loginToFitbit") Fitbit Project
-		li
-			a(href="/gallery") My Gallery
-		li
-			a(href="/randomFilm") Random Films Project
-		li
-			a(href="/about") About Me
+			a(href="/userProfile") My Profile
 
 
 img(id='homePageImage' src='../uploads/me3.png')
@@ -34,3 +35,7 @@ script(type="text/javascript").
 	$($(".home-list li a")[1]).fadeIn(1500)
 	$($(".home-list li a")[2]).fadeIn(2000)
 	$($(".home-list li a")[3]).fadeIn(2500)
+
+	if("#{userID}"){
+		$('.notLoggedIn').hide()
+	}

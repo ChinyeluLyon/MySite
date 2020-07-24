@@ -1,88 +1,23 @@
-const mysql = require('mysql')
 const pug = require('pug')
 const express = require('express')
 const router = express.Router()
-const connection = mysql.createConnection({
-	host: 'eu-cdbr-west-03.cleardb.net',
-	user: 'bcc861a75b94d1',
-	password: '7a2672e3',
-	database: 'heroku_b301eebc16a43c7'
-})
+let pool = require('../database');
+let fitbit_functions = require('../functions/fitbit')
+
 
 router.route("/users").get(function(req,res)
 {
-	let sqlQuery = 'SELECT * FROM users'
-	connection.query(sqlQuery, function (err, rows, fields) {
-		if (err) {
-			throw err
-			console.log('The solution is: ', rows[0].solution)
-		}
-		else{
-
-			for(let i=0; i < rows.length; i++){
-				let nowDate = new Date()
-				let dateDiff = new Date(nowDate - rows[i].user_DOB)
-				let age = dateDiff.getUTCFullYear() - 1970
-				rows[i].user_age = age
-			}
-
-			res.render('allUsers', {
-				pageName: 'All Users',
-				usersArr: rows
-			})
-			console.log('Query Successful!')
-		}
-	})
-
-})
-
-// router.route('/user').get(authenticateToken, function(req,res)
-// {
-// 	console.log('SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"')
-// 	let sqlQuery = 'SELECT * FROM users WHERE login_token = "'+req.cookies.token+'"'
-// 	connection.query(sqlQuery, function (err, rows, fields) {
-// 		if (err) {
-// 			throw err
-// 			console.log('The solution is: ', rows[0].solution)
-// 		}
-// 		else{
-// 			let nowDate = new Date()
-// 			let age = new Date(nowDate - rows[0].user_DOB)
-
-// 			res.render('user', 
-// 			{
-// 				Name: rows[0].user_name,
-// 				Age: age.getUTCFullYear() - 1970
-// 			})
-// 		}
-// 	})
-// })
-
-
-//this is a new webpage, should show specific user
-router.route('/users/:ID').get(function(req,res)
-{
-	let sqlQuery = 'SELECT * FROM users WHERE user_id = ?'
-	connection.query(sqlQuery, [req.params.ID], function (err, rows, fields) {
-		if (err) {
-			throw err
-			console.log('The solution is: ', rows[0].solution)
-		}
-		else if (rows.length > 0){
-			res.render('user', 
-			{
-				Name: rows[0].user_name, 
-				DOB: rows[0].user_DOB, 
-				Gender: rows[0].user_gender,
-				ID: rows[0].user_id 
-			})
-			console.log('Query Successful!')
-		}
-		else{
-			res.render('home')
-		}
+	let sqlQuery = 'SELECT * FROM new_users'
+	pool.useMysqlPool(sqlQuery, function(rows){
+		res.render('allUsers', {
+			pageName: 'All Users',
+			usersArr: rows
+		})
+		console.log('Query Successful!')
 	})
 })
+
+
 
 const checkIfLoggedInAuth = (req, res, next)=>{
 	if (!req.user){
@@ -93,10 +28,69 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 	}
 }
 
-router.route('/userProfile/').get(checkIfLoggedInAuth, function(req,res){
-	res.send('logged in as user no.' + req.user)
+
+
+router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
+
+	fitbit_functions.getFitbitUserAccessToken(req.user, function(tokens){
+		console.log('OIIII LOOK AccTok & CODE')
+		console.log(tokens.accessToken)
+		console.log(req.query.code)
+		if(!tokens.accessToken && !req.query.code){
+			let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
+			// let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BTWW&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
+			console.log('getCode redirecting to '+ authUrl)
+			res.redirect(authUrl)
+		}
+		if(!tokens.accessToken && req.query.code || tokens.accessToken == 'undefined' && req.query.code){
+			console.log('IN HERE')
+			fitbit_functions.getInitialTokens(req.query.code, req.user, function(initialTokens){
+				fitbit_functions.updateAvgDailySteps(initialTokens, req.user)
+				fitbit_functions.updateRecentSteps(initialTokens, req.user)
+			})
+		}else{
+			fitbit_functions.updateAvgDailySteps(tokens, req.user)
+			fitbit_functions.updateRecentSteps(tokens, req.user)
+		}
+	})
+	
+	let query = 'SELECT * FROM new_users WHERE user_id = '+req.user
+	console.log('USER PROFILE QUERY: ')
+	console.log(query)
+	pool.useMysqlPool(query, function(rows){
+		console.log(rows[0])
+		res.render('userProfile', { 
+			userName: rows[0].user_name,
+			recentSteps: rows[0].recent_daily_steps,
+			averageSteps: rows[0].average_daily_steps,
+			caloriesOut: rows[0].calories_out,
+			floors: rows[0].floors,
+			userImage: rows[0].user_image_url,
+			fitbitId: rows[0].fitbit_user_id,
+			fitbitAccessToken: rows[0].fitbit_access_token
+		})
+	})
 })
 
 
+router.route('/oldUserProfile').get(checkIfLoggedInAuth, function(req,res){
+	let query = 'SELECT * FROM new_users WHERE user_id = '+req.user
+	console.log('USER PROFILE QUERY: ')
+	console.log(query)
+	pool.useMysqlPool(query, function(rows){
+		console.log(rows[0])
+		res.render('userProfile', { 
+			userName: rows[0].user_name,
+			recentSteps: rows[0].recent_daily_steps,
+			averageSteps: rows[0].average_daily_steps,
+			caloriesOut: rows[0].calories_out,
+			floors: rows[0].floors,
+			userImage: rows[0].user_image_url,
+			fitbitId: rows[0].fitbit_user_id,
+			fitbitAccessToken: rows[0].fitbit_access_token
+		})
+	})
+})
 
+// connection.end()
 module.exports = router

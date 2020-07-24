@@ -1,2 +1,3 @@
 # Default ignored files
 ./config/keys.js
+./config/localKeys.js
