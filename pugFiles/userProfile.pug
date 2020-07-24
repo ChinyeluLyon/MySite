@@ -7,11 +7,6 @@ script(src="/javaScript/bundle.js")
 
 img(class='userImage' src=userImage)
 h1 #{userName}'s Profile
-<<<<<<< HEAD
-a(id='refreshButton' href='/getCode')
-	img(src='/uploads/refresh.png' style='width: 4vmin;')
-=======
->>>>>>> origin/master
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
@@ -51,65 +46,7 @@ script(type='text/javascript').
 			}
 		});
 
-
-<<<<<<< HEAD
-
-	
-
-=======
->>>>>>> origin/master
 	let searchParams = window.location.search
 	let indexEq = searchParams.indexOf('=')
 	let fitbitCode = searchParams.slice(indexEq+1)
-
-<<<<<<< HEAD
-	$('#refreshButton').click(function(){
-		if(fitbitCode){
-			debugger
-			$.post('/getAllTokens',{
-				code: fitbitCode
-			},
-			function(data, status){
-				alert('We Okay')
-			})
-		}
-	})
-
-
-	//- $.get('/getAll', null, function(data, status){
-	//- 	if(confirm(data)){
-	//- 		location.href = '/loginToFitbit'
-	//- 		//- location.href = '/connectFitbit'
-	//- 	}
-	//- })
- 
-
-	//- let hashData = window.location.hash 
-	//- let indexEq = hashData.indexOf('=')
-	//- let indexAmp = hashData.indexOf('&')
-	//- let accToken = hashData.slice(indexEq+1, indexAmp)
-	
-	//- let indexUserId = hashData.indexOf('user_id=')
-	//- let indexScope = hashData.indexOf('&scope=')
-	//- let userId = hashData.slice(indexUserId+8, indexScope)
-	
-	//- //- alert('TOKEN: '+ accToken)
-	//- //- alert('USER ID: '+ userId)
-	
-	//- if(accToken){
-	//- 	$.post('/requestFitbit',
-	//- 	{
-	//- 		fitbitAccToken: accToken,
-	//- 		fitbitUserId: userId
-	//- 	},
-	//- 	function(data, status){
-	//- 		alert('sent')
-	//- 	})
-	//- }
-=======
->>>>>>> origin/master
-
-
-
-
 
