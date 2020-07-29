@@ -13,13 +13,13 @@ function useMysqlPool(query, callback){
 		if(err) {
 			throw err
 		}
-		console.log('connected as id ' + connection.threadId)
+		// console.log('connected as id ' + connection.threadId)
 		connection.query(query, (err, rows) => {
             	connection.release() // return the connection to pool
             	if(err) {
             		throw err
             	}
-            	console.log('The data from table are: \n', rows)
+            	// console.log('The data from table are: \n', rows)
             	callback(rows)
             })
 	})

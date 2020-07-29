@@ -9,10 +9,15 @@ function updateAvgDailySteps(tokenObj, userID){
 		},
 		uri: 'https://api.fitbit.com/1/user/-/profile.json'
 	}, function (err, res, body) {
-		console.log(body)
+		// console.log(body)
 		let userData = JSON.parse(body)
+
 		if(userData.success == false){
 			refreshAccessToken(tokenObj.refreshToken, userID, function(newAccessToken){
+				console.log("==================0====================")
+				console.log('orig: '+tokenObj.accessToken)
+				console.log('new: '+newAccessToken)
+				console.log("==================1====================")
 				newTokens = {'accessToken': newAccessToken}
 				updateAvgDailySteps(newTokens, userID)
 			})
@@ -55,8 +60,8 @@ function updateRecentSteps(tokenObj, userID){
 }
 
 function getInitialTokens(code, userID, callback){
-	let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=https://chinyelu.herokuapp.com/userProfile'
-	// let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=http://localhost:5000/userProfile'
+	// let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=https://chinyelu.herokuapp.com/userProfile'
+	let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=http://localhost:5000/userProfile'
 	request({
 		headers: {
 			'Authorization': 'Basic MjJCVFdXOjI5NGFmODc1ODg1NmQ0OTBjZTVmY2I4MWY3ZWEwZmZl',
@@ -66,7 +71,7 @@ function getInitialTokens(code, userID, callback){
 		method: 'POST'
 	}, function (err, res, body) {
 		tokenJSON = JSON.parse(body)
-		console.log(body)
+		// console.log(body)
 		let saveTokensSQL = 'UPDATE new_users SET fitbit_access_token = "'+tokenJSON.access_token+'", fitbit_refresh_token = "'+tokenJSON.refresh_token+'" WHERE user_id = '+userID
 		pool.useMysqlPool(saveTokensSQL, function(rows){
 			console.log('Tokens Updated')
@@ -75,7 +80,7 @@ function getInitialTokens(code, userID, callback){
 	})
 }
 
-function getFitbitUserAccessToken(userID, callback){
+function getFitbitUserTokens(userID, callback){
 
 	// query to get access token and expiry time
 	let accessTokenExpiryTimeSQL = 'SELECT fitbit_access_token, fitbit_refresh_token FROM new_users WHERE user_id = '+userID
@@ -100,12 +105,20 @@ function refreshAccessToken(refreshToken, userID, callback){
 		method: 'POST'
 	}, function (err, res, body) {
 		tokenJSON = JSON.parse(body)
-		console.log('###################TOKENS refreshed##################')
-		callback(tokenJSON.access_token)
+
+		if(!tokenJSON.errors){
+			console.log('###################TOKENS refreshed##################')
+			callback(tokenJSON.access_token)
+		}
+		else{
+			console.log("CHINYELU LOG: INVALID REFRESH TOKEN ( "+refreshToken+" )")
+			callback(false)
+		}
 	})
 }
 
 exports.updateAvgDailySteps = updateAvgDailySteps
 exports.updateRecentSteps = updateRecentSteps
-exports.getFitbitUserAccessToken = getFitbitUserAccessToken
+exports.getFitbitUserTokens = getFitbitUserTokens
 exports.getInitialTokens = getInitialTokens
+exports.refreshAccessToken = refreshAccessToken

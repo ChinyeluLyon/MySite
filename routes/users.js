@@ -31,33 +31,39 @@ const checkIfLoggedInAuth = (req, res, next)=>{
 
 router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
 
-	fitbit_functions.getFitbitUserAccessToken(req.user, function(tokens){
-		console.log('OIIII LOOK AccTok & CODE')
-		console.log(tokens.accessToken)
-		console.log(req.query.code)
+	fitbit_functions.getFitbitUserTokens(req.user, function(tokens){
+		console.log('AccTok: '+tokens.accessToken)
+		console.log('CODE: '+req.query.code)
 		if(!tokens.accessToken && !req.query.code){
+			console.log('First Time: need to login to fitbit ...')
 			let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
 			// let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BTWW&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
 			console.log('getCode redirecting to '+ authUrl)
 			res.redirect(authUrl)
 		}
-		if(!tokens.accessToken && req.query.code || tokens.accessToken == 'undefined' && req.query.code){
-			console.log('IN HERE')
+		else if(!tokens.accessToken && req.query.code || tokens.accessToken == 'undefined' && req.query.code){
+			console.log('First Time redirected from fitbit')
 			fitbit_functions.getInitialTokens(req.query.code, req.user, function(initialTokens){
 				fitbit_functions.updateAvgDailySteps(initialTokens, req.user)
 				fitbit_functions.updateRecentSteps(initialTokens, req.user)
+				loadUpUserPage(res, req.user)
 			})
 		}else{
 			fitbit_functions.updateAvgDailySteps(tokens, req.user)
 			fitbit_functions.updateRecentSteps(tokens, req.user)
+			loadUpUserPage(res, req.user)
 		}
 	})
 	
-	let query = 'SELECT * FROM new_users WHERE user_id = '+req.user
-	console.log('USER PROFILE QUERY: ')
-	console.log(query)
+
+})
+
+function loadUpUserPage(res, userID){
+	let query = 'SELECT * FROM new_users WHERE user_id = '+userID
+	// console.log('USER PROFILE QUERY: ')
+	// console.log(query)
 	pool.useMysqlPool(query, function(rows){
-		console.log(rows[0])
+		// console.log(rows[0])
 		res.render('userProfile', { 
 			userName: rows[0].user_name,
 			recentSteps: rows[0].recent_daily_steps,
@@ -69,8 +75,7 @@ router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
 			fitbitAccessToken: rows[0].fitbit_access_token
 		})
 	})
-})
-
+}
 
 router.route('/oldUserProfile').get(checkIfLoggedInAuth, function(req,res){
 	let query = 'SELECT * FROM new_users WHERE user_id = '+req.user
