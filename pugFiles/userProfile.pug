@@ -7,30 +7,30 @@ script(src="/javaScript/bundle.js")
 
 img(class='userImage' src=userImage)
 h1 #{userName}'s Profile
+h2 Floors: #{floors}
 
 div(class="canvasWrapper" style="width:70vmin; height:70vmin;")
 	canvas(id="myChart")
+
 
 script(type='text/javascript').
 	let ctx = document.getElementById('myChart')
 		let myChart = new Chart(ctx, {
 			type: 'bar',
 			data: {
-				labels: ['Recent Steps', 'Average Daily Steps', 'Calories Out', 'Floors'],
+				labels: ['Recent Steps', 'Average Daily Steps', 'Calories Out'],
 				datasets: [{
 					label: 'My Stats',
-					data: [#{recentSteps}, #{averageSteps}, #{caloriesOut}, #{floors}],
+					data: [#{recentSteps}, #{averageSteps}, #{caloriesOut}],
 					backgroundColor: [
 					'rgba(255, 99, 132, 0.5)',
 					'rgba(54, 162, 235, 0.5)',
-					'rgba(255, 99, 132, 0.5)',
-					'rgba(54, 162, 235, 0.5)'
+					'rgba(255, 99, 132, 0.5)'
 					],
 					borderColor: [
 					'rgba(255, 99, 132, 1)',
 					'rgba(54, 162, 235, 1)',
-					'rgba(255, 99, 132, 1)',
-					'rgba(54, 162, 235, 1)'
+					'rgba(255, 99, 132, 1)'
 					],
 					borderWidth: 1
 				}]

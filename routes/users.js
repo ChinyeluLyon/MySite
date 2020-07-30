@@ -63,7 +63,10 @@ function loadUpUserPage(res, userID){
 	// console.log('USER PROFILE QUERY: ')
 	// console.log(query)
 	pool.useMysqlPool(query, function(rows){
-		// console.log(rows[0])
+		console.log('--------------s-----------------')
+		console.log(rows[0].summary_JSON)
+		console.log('--------------s-----------------')
+
 		res.render('userProfile', { 
 			userName: rows[0].user_name,
 			recentSteps: rows[0].recent_daily_steps,

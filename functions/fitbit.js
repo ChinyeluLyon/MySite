@@ -51,7 +51,7 @@ function updateRecentSteps(tokenObj, userID){
 			})
 		}
 		else{
-			let updateRecentStepsSQL = 'UPDATE new_users SET recent_daily_steps = '+activityData.summary.steps+', calories_out = '+activityData.summary.caloriesOut+', floors = '+activityData.summary.floors+'  WHERE user_id = '+userID
+			let updateRecentStepsSQL = 'UPDATE new_users SET recent_daily_steps = '+activityData.summary.steps+', calories_out = '+activityData.summary.caloriesOut+', floors = '+activityData.summary.floors+', summary_JSON = "'+activityData.summary+'"  WHERE user_id = '+userID
 			pool.useMysqlPool(updateRecentStepsSQL, function(rows){
 				console.log('Recent Steps Updated')
 			})
@@ -60,8 +60,8 @@ function updateRecentSteps(tokenObj, userID){
 }
 
 function getInitialTokens(code, userID, callback){
-	// let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=https://chinyelu.herokuapp.com/userProfile'
-	let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=http://localhost:5000/userProfile'
+	let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=https://chinyelu.herokuapp.com/userProfile'
+	// let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=http://localhost:5000/userProfile'
 	request({
 		headers: {
 			'Authorization': 'Basic MjJCVFdXOjI5NGFmODc1ODg1NmQ0OTBjZTVmY2I4MWY3ZWEwZmZl',
