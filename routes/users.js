@@ -46,6 +46,8 @@ router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
 			console.log('CODE: '+req.query.code)
 			console.log('First Time redirected from fitbit')
 			fitbit_functions.getInitialTokens(req.query.code, req.user, function(initialTokens){
+				console.log('initial accessToken: '+ initialTokens.accessToken)
+				console.log('initial refreshToken: '+ initialTokens.refreshToken)
 				fitbit_functions.updateAvgDailySteps(initialTokens, req.user)
 				fitbit_functions.updateRecentSteps(initialTokens, req.user, function(succesfulUpdate){
 					if(succesfulUpdate){

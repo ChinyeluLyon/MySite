@@ -3,6 +3,8 @@ const request = require('request')
 
 
 function updateAvgDailySteps(tokenObj, userID){
+console.log('IN updateAvgDailySteps AT: '+tokenObj.accessToken)
+console.log('IN updateAvgDailySteps RT: '+tokenObj.refreshToken)
 	request({
 		headers: {
 			'Authorization': 'Bearer '+tokenObj.accessToken
@@ -14,12 +16,17 @@ function updateAvgDailySteps(tokenObj, userID){
 
 		if(userData.success == false){
 			refreshAccessToken(tokenObj.refreshToken, userID, function(newAccessToken){
-				console.log("==================0====================")
-				console.log('orig: '+tokenObj.accessToken)
-				console.log('new: '+newAccessToken)
-				console.log("==================1====================")
-				newTokens = {'accessToken': newAccessToken}
-				updateAvgDailySteps(newTokens, userID)
+				if(newAccessToken){
+					console.log("==================0====================")
+					console.log('orig: '+tokenObj.accessToken)
+					console.log('new: '+newAccessToken)
+					console.log("==================1====================")
+					newTokens = {'accessToken': newAccessToken}
+					updateAvgDailySteps(newTokens, userID)
+				}
+				else{
+					console.log(tokenObj.refreshToken+' is INVALID')
+				}
 			})
 		}
 		else{
@@ -35,6 +42,8 @@ function updateAvgDailySteps(tokenObj, userID){
 }
 
 function updateRecentSteps(tokenObj, userID, callback){
+	console.log('IN updateRecentSteps AT: '+tokenObj.accessToken)
+	console.log('IN updateRecentSteps RT: '+tokenObj.refreshToken)
 	let dateNow = new Date().toISOString().slice(0,10)
 	let activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json'
 	request({
