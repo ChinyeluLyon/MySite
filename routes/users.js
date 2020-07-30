@@ -33,8 +33,9 @@ router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
 
 	fitbit_functions.getFitbitUserTokens(req.user, function(tokens){
 		console.log('AccTok: '+tokens.accessToken)
-		console.log('CODE: '+req.query.code)
-		if(!tokens.accessToken && !req.query.code){
+		// console.log('CODE: '+req.query.code)
+		if(!tokens.accessToken && !req.query.code || tokens.accessToken == 'undefined' && tokens.refreshToken == 'undefined' && !req.query.code){
+			console.log('CODE: '+req.query.code+' ... should be undefined')
 			console.log('First Time: need to login to fitbit ...')
 			let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
 			// let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BTWW&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
@@ -42,16 +43,24 @@ router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
 			res.redirect(authUrl)
 		}
 		else if(!tokens.accessToken && req.query.code || tokens.accessToken == 'undefined' && req.query.code){
+			console.log('CODE: '+req.query.code)
 			console.log('First Time redirected from fitbit')
 			fitbit_functions.getInitialTokens(req.query.code, req.user, function(initialTokens){
 				fitbit_functions.updateAvgDailySteps(initialTokens, req.user)
-				fitbit_functions.updateRecentSteps(initialTokens, req.user)
-				loadUpUserPage(res, req.user)
+				fitbit_functions.updateRecentSteps(initialTokens, req.user, function(succesfulUpdate){
+					if(succesfulUpdate){
+						loadUpUserPage(res, req.user)
+					}
+				})
 			})
 		}else{
+			console.log('AccTok: '+tokens.accessToken)
 			fitbit_functions.updateAvgDailySteps(tokens, req.user)
-			fitbit_functions.updateRecentSteps(tokens, req.user)
-			loadUpUserPage(res, req.user)
+			fitbit_functions.updateRecentSteps(tokens, req.user, function(succesfulUpdate){
+				if(succesfulUpdate){
+					loadUpUserPage(res, req.user)
+				}
+			})
 		}
 	})
 	
@@ -63,10 +72,6 @@ function loadUpUserPage(res, userID){
 	// console.log('USER PROFILE QUERY: ')
 	// console.log(query)
 	pool.useMysqlPool(query, function(rows){
-		console.log('--------------s-----------------')
-		console.log(rows[0].summary_JSON)
-		console.log('--------------s-----------------')
-
 		res.render('userProfile', { 
 			userName: rows[0].user_name,
 			recentSteps: rows[0].recent_daily_steps,

@@ -8,19 +8,24 @@ router.route("/").get(function(req,res)
 	console.log(req.user)
 	if(req.user)
 	{
-		console.log('logged in')
-		console.log('DEBUG RECENT UPDATE')
-
-
-		let getUserImageSQL = 'SELECT user_image_url from new_users WHERE user_id = '+req.user+' LIMIT 1'
-		pool.useMysqlPool(getUserImageSQL, function(rows){
-			res.render('home', 
-			{
-				pageName: 'Home',
-				userID: req.user,
-				userImage: rows[0].user_image_url
-			})
+		verifyUserId(req.user, function(verified){
+			if(verified){
+				console.log('logged in')
+				let getUserImageSQL = 'SELECT user_image_url from new_users WHERE user_id = '+req.user+' LIMIT 1'
+				pool.useMysqlPool(getUserImageSQL, function(rows){
+					res.render('home', 
+					{
+						pageName: 'Home',
+						userID: req.user,
+						userImage: rows[0].user_image_url
+					})
+				})
+			}else{
+				res.redirect('/auth/logout')
+			}
 		})
+
+		
 
 	}
 	else{
@@ -31,5 +36,16 @@ router.route("/").get(function(req,res)
 	}
 })
 
+function verifyUserId(userID, callback){
+	let checkUserIdSQL = 'SELECT * FROM new_users WHERE user_id = '+userID+' LIMIT 1'
+	pool.useMysqlPool(checkUserIdSQL, function(rows){
+		if(rows.length == 1){
+			callback(true)
+		}
+		else{
+			callback(false)
+		}
+	})
+}
 
 module.exports = router

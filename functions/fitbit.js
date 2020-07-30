@@ -25,7 +25,7 @@ function updateAvgDailySteps(tokenObj, userID){
 		else{
 			console.log('AVG Daily Steps: '+ userData.user.averageDailySteps)
 			// update all values
-			let updateAverageStepsSQL = 'UPDATE heroku_b301eebc16a43c7.new_users SET average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+userID
+			let updateAverageStepsSQL = 'UPDATE new_users SET average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+userID
 			pool.useMysqlPool(updateAverageStepsSQL, function(rows){
 				console.log('Average Daily Steps updated')
 			})
@@ -34,7 +34,7 @@ function updateAvgDailySteps(tokenObj, userID){
 
 }
 
-function updateRecentSteps(tokenObj, userID){
+function updateRecentSteps(tokenObj, userID, callback){
 	let dateNow = new Date().toISOString().slice(0,10)
 	let activitiesURL = 'https://api.fitbit.com/1/user/-/activities/date/'+dateNow+'.json'
 	request({
@@ -51,9 +51,12 @@ function updateRecentSteps(tokenObj, userID){
 			})
 		}
 		else{
-			let updateRecentStepsSQL = 'UPDATE new_users SET recent_daily_steps = '+activityData.summary.steps+', calories_out = '+activityData.summary.caloriesOut+', floors = '+activityData.summary.floors+', summary_JSON = "'+activityData.summary+'"  WHERE user_id = '+userID
+			let updateRecentStepsSQL = 'UPDATE new_users SET recent_daily_steps = '+activityData.summary.steps+', calories_out = '+activityData.summary.caloriesOut+', floors = '+activityData.summary.floors+' WHERE user_id = '+userID
 			pool.useMysqlPool(updateRecentStepsSQL, function(rows){
 				console.log('Recent Steps Updated')
+				
+				//update successful so callback true
+				callback(true)
 			})
 		}
 	})

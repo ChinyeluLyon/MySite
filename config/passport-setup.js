@@ -13,7 +13,7 @@ passport.deserializeUser((userID,done)=>{
 	done(null,userID)
 })
 
-function addGoogleUserDataToDb(userName, email, profileImageUrl){
+function addGoogleUserDataToDb(userName, email, profileImageUrl, callback){
 	let sqlQuery = '\
 	INSERT IGNORE INTO \
 	new_users (user_name, user_email, user_image_url) \
@@ -23,6 +23,7 @@ function addGoogleUserDataToDb(userName, email, profileImageUrl){
 
 	pool.useMysqlPool(sqlQuery, function(rows){
 		console.log('Query Successful!')
+		callback(true)
 	})
 }
 
@@ -30,6 +31,7 @@ function getUserId(userName, email, profileImageUrl, callback){
 	let sqlQuery = 'SELECT * FROM new_users WHERE user_name = "'+userName+'" AND user_email = "'+email+'" AND  user_image_url = "'+profileImageUrl+'" '
 	// console.log(sqlQuery)
 	pool.useMysqlPool(sqlQuery, function(rows){
+		console.log(rows)
 		let userObj = {
 			user_id: rows[0].user_id,
 			user_name: userName,
@@ -57,9 +59,14 @@ passport.use(new GoogleStrategy({
 			let userEmail = email._json.email
 			let userImageUrl = email._json.picture
 
-			addGoogleUserDataToDb(userName, userEmail, userImageUrl)
-			getUserId(userName, userEmail, userImageUrl, function(userIDResponse){
-				done(null, userIDResponse)
+			addGoogleUserDataToDb(userName, userEmail, userImageUrl, function(added){
+				if(added){
+					getUserId(userName, userEmail, userImageUrl, function(userIDResponse){
+						done(null, userIDResponse)
+					})
+				}else{
+					console.log(userName+' not added')
+				}
 			})
 		}
 
