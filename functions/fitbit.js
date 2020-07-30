@@ -87,6 +87,7 @@ function getInitialTokens(code, userID, callback){
 		let saveTokensSQL = 'UPDATE new_users SET fitbit_access_token = "'+tokenJSON.access_token+'", fitbit_refresh_token = "'+tokenJSON.refresh_token+'" WHERE user_id = '+userID
 		pool.useMysqlPool(saveTokensSQL, function(rows){
 			console.log('Tokens Updated')
+			console.log('fitbit_access_token: '+tokenJSON.access_token+' and fitbit_refresh_token: '+tokenJSON.refresh_token+' UPDATED')
 			callback({'accessToken': tokenJSON.access_token, 'refreshToken': tokenJSON.refresh_token})
 		})
 	})
