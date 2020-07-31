@@ -3,8 +3,8 @@ const request = require('request')
 
 
 function updateAvgDailySteps(tokenObj, userID){
-console.log('IN updateAvgDailySteps AT: '+tokenObj.accessToken)
-console.log('IN updateAvgDailySteps RT: '+tokenObj.refreshToken)
+	console.log('IN updateAvgDailySteps AT: '+tokenObj.accessToken)
+	console.log('IN updateAvgDailySteps RT: '+tokenObj.refreshToken)
 	request({
 		headers: {
 			'Authorization': 'Bearer '+tokenObj.accessToken
@@ -76,7 +76,10 @@ function getInitialTokens(code, userID, callback){
 	// let getTokenUrl = 'https://api.fitbit.com/oauth2/token?code='+code+'&grant_type=authorization_code&redirect_uri=http://localhost:5000/userProfile'
 	request({
 		headers: {
-			'Authorization': 'Basic MjJCVFdXOjI5NGFmODc1ODg1NmQ0OTBjZTVmY2I4MWY3ZWEwZmZl',
+			// public
+			'Authorization': 'Basic MjJCUVJGOmVhZjRlOTc2ZDBkODhmM2Y3ZDllOGY4ODEzYmYxNTFi',
+			// local
+			// 'Authorization': 'Basic MjJCVFdXOjI5NGFmODc1ODg1NmQ0OTBjZTVmY2I4MWY3ZWEwZmZl',
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		uri: getTokenUrl,
@@ -113,7 +116,10 @@ function refreshAccessToken(refreshToken, userID, callback){
 	let refreshURL = 'https://api.fitbit.com/oauth2/token?grant_type=refresh_token&refresh_token='+refreshToken
 	request({
 		headers: {
-			'Authorization': 'Basic MjJCVFdXOjI5NGFmODc1ODg1NmQ0OTBjZTVmY2I4MWY3ZWEwZmZl',
+			// public
+			'Authorization': 'Basic MjJCUVJGOmVhZjRlOTc2ZDBkODhmM2Y3ZDllOGY4ODEzYmYxNTFi',
+			// local
+			// 'Authorization': 'Basic MjJCVFdXOjI5NGFmODc1ODg1NmQ0OTBjZTVmY2I4MWY3ZWEwZmZl',
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
 		uri: refreshURL,
