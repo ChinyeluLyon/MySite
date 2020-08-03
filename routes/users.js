@@ -37,30 +37,36 @@ router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
 		if(!tokens.accessToken && !req.query.code || tokens.accessToken == 'undefined' && tokens.refreshToken == 'undefined' && !req.query.code){
 			console.log('CODE: '+req.query.code+' ... should be undefined')
 			console.log('First Time: need to login to fitbit ...')
-			let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
-			// let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BTWW&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
-			console.log('getCode redirecting to '+ authUrl)
-			res.redirect(authUrl)
+			fitbit_functions.redirectToGetFitbitCode(res)
 		}
-		else if(!tokens.accessToken && req.query.code || tokens.accessToken == 'undefined' && req.query.code){
+		else if(req.query.code){
 			console.log('CODE: '+req.query.code)
 			console.log('First Time redirected from fitbit')
 			fitbit_functions.getInitialTokens(req.query.code, req.user, function(initialTokens){
 				console.log('initial accessToken: '+ initialTokens.accessToken)
 				console.log('initial refreshToken: '+ initialTokens.refreshToken)
-				fitbit_functions.updateAvgDailySteps(initialTokens, req.user)
+				fitbit_functions.updateAvgDailySteps(initialTokens, req.user, function(succesfulUpdate){
+					console.log('CALLBACK IS A FUNCTION')
+				})
 				fitbit_functions.updateRecentSteps(initialTokens, req.user, function(succesfulUpdate){
 					if(succesfulUpdate){
 						loadUpUserPage(res, req.user)
+					}else{
+						fitbit_functions.redirectToGetFitbitCode(res)
 					}
 				})
 			})
 		}else{
 			console.log('AccTok: '+tokens.accessToken)
-			fitbit_functions.updateAvgDailySteps(tokens, req.user)
+			fitbit_functions.updateAvgDailySteps(tokens, req.user, function(succesfulUpdate){
+				console.log('CALLBACK IS A FUNCTION')
+			})
 			fitbit_functions.updateRecentSteps(tokens, req.user, function(succesfulUpdate){
 				if(succesfulUpdate){
 					loadUpUserPage(res, req.user)
+				}else{
+					console.log('2 fail')
+					fitbit_functions.redirectToGetFitbitCode(res)
 				}
 			})
 		}

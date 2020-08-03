@@ -2,7 +2,7 @@ let pool = require('../database');
 const request = require('request')
 
 
-function updateAvgDailySteps(tokenObj, userID){
+function updateAvgDailySteps(tokenObj, userID, callback){
 	console.log('IN updateAvgDailySteps AT: '+tokenObj.accessToken)
 	console.log('IN updateAvgDailySteps RT: '+tokenObj.refreshToken)
 	request({
@@ -26,6 +26,8 @@ function updateAvgDailySteps(tokenObj, userID){
 				}
 				else{
 					console.log(tokenObj.refreshToken+' is INVALID')
+					// invalid so need to get new code
+					callback(false)
 				}
 			})
 		}
@@ -39,6 +41,13 @@ function updateAvgDailySteps(tokenObj, userID){
 		}
 	})
 
+}
+
+function redirectToGetFitbitCode(res){
+	let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BQRF&redirect_uri=https%3A%2F%2Fchinyelu.herokuapp.com%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
+	// let authUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22BTWW&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FuserProfile&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800'
+	console.log('getCode redirecting to '+ authUrl)
+	res.redirect(authUrl)
 }
 
 function updateRecentSteps(tokenObj, userID, callback){
@@ -55,15 +64,22 @@ function updateRecentSteps(tokenObj, userID, callback){
 		let activityData = JSON.parse(body)
 		if(activityData.success == false){
 			refreshAccessToken(tokenObj.refreshToken, userID, function(newAccessToken){
-				newTokens = {'accessToken': newAccessToken}
-				updateRecentSteps(newTokens, userID)
+				if(newAccessToken){
+					newTokens = {'accessToken': newAccessToken}
+					updateRecentSteps(newTokens, userID)
+				}
+				else{
+					console.log(tokenObj.refreshToken+' is INVALID')
+					// invalid so need to get new code
+					callback(false)
+				}
 			})
 		}
 		else{
 			let updateRecentStepsSQL = 'UPDATE new_users SET recent_daily_steps = '+activityData.summary.steps+', calories_out = '+activityData.summary.caloriesOut+', floors = '+activityData.summary.floors+' WHERE user_id = '+userID
 			pool.useMysqlPool(updateRecentStepsSQL, function(rows){
 				console.log('Recent Steps Updated')
-				
+
 				//update successful so callback true
 				callback(true)
 			})
@@ -129,6 +145,14 @@ function refreshAccessToken(refreshToken, userID, callback){
 
 		if(!tokenJSON.errors){
 			console.log('###################TOKENS refreshed##################')
+
+			let saveTokensSQL = 'UPDATE new_users SET fitbit_access_token = "'+tokenJSON.access_token+'", fitbit_refresh_token = "'+tokenJSON.refresh_token+'" WHERE user_id = '+userID
+			pool.useMysqlPool(saveTokensSQL, function(rows){
+				console.log('Tokens Updated')
+				console.log('fitbit_access_token: '+tokenJSON.access_token+' and fitbit_refresh_token: '+tokenJSON.refresh_token+' UPDATED')
+				callback({'accessToken': tokenJSON.access_token, 'refreshToken': tokenJSON.refresh_token})
+			})
+
 			callback(tokenJSON.access_token)
 		}
 		else{
@@ -143,3 +167,4 @@ exports.updateRecentSteps = updateRecentSteps
 exports.getFitbitUserTokens = getFitbitUserTokens
 exports.getInitialTokens = getInitialTokens
 exports.refreshAccessToken = refreshAccessToken
+exports.redirectToGetFitbitCode = redirectToGetFitbitCode
