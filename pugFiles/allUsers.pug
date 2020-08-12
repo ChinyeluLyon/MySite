@@ -3,28 +3,33 @@ doctype html
 html
 	include Templates/newHeader.pug
 
-- 	if(usersArr.length > 0) {
+- if(usersArr.length > 0) {
 
-table(id="sortableTable" align='center' class="display")
-	thead
-		tr
+	table(id="leaderboard")
+		thead
 			th Name
 			th Recent Steps
 			th Avg. Steps
 
-	each val in usersArr
-			tr
-				td= val.user_name
-				td= val.recent_daily_steps
-				td= val.average_daily_steps
+		- for(let i = 0; i < usersArr.length; i++){
+			tr(id="winner")
+				td= usersArr[i].user_name
+				td= usersArr[i].recent_daily_steps
+				td= usersArr[i].average_daily_steps
+
+		- }
 
 - } else{ 
 h2 no users
 - }
 
+
+
 script(type='text/javascript').
 	$(document).ready(function(){
 		$('#sortableTable').DataTable()
 	})
+
+	$('#winner').css("background-color", "#00cec9")
 
 

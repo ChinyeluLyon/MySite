@@ -1,4 +1,4 @@
-h1, h2, h3, a{
+h1, h2, h3, a, td, th{
 	font-family: 'Sen', sans-serif;
 }
 body{
@@ -6,28 +6,36 @@ body{
 	background-color: #9A9A9A;
 }
 
+#leaderboard{
+    text-align: center;
+    width: 100vmin;
+    height: 50vmin;
+    font-size: 5vmin;
+    margin-left: auto;
+    margin-right: auto;
+}
 .googleWrapper{
 	display: flex; 
 	justify-content:center;
 }
 
 .googleIcon{
-    width: 4vmin;
-    padding-right: 4vmin;
-    background-color: aliceblue;
-    padding-left: 4vmin;
-    border-bottom-left-radius: 3vmin;
+	width: 4vmin;
+	padding-right: 4vmin;
+	background-color: aliceblue;
+	padding-left: 4vmin;
+	border-bottom-left-radius: 3vmin;
 }
 
 .googleLinkText:hover {
-    text-decoration: none;
-    background-color: #c9d1da;
+	text-decoration: none;
+	background-color: #c9d1da;
 }
 .googleLinkText{
 	background-color: aliceblue;
-    padding: 3vmin;
-    border-top-right-radius: 3vmin;
-    /*border-bottom-right-radius: 3vmin;*/
+	padding: 3vmin;
+	border-top-right-radius: 3vmin;
+	/*border-bottom-right-radius: 3vmin;*/
 }
 
 img.userImage{

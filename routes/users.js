@@ -6,13 +6,38 @@ let fitbit_functions = require('../functions/fitbit')
 
 router.route("/users").get(function(req,res)
 {
-	let sqlQuery = 'SELECT * FROM new_users'
+	let limit = 5;
+	let sqlQuery = 'SELECT * FROM new_users ORDER BY recent_daily_steps DESC LIMIT '+limit
 	pool.useMysqlPool(sqlQuery, function(rows){
-		res.render('allUsers', {
-			pageName: 'All Users',
-			usersArr: rows
+
+		for(let i = 0; i < rows.length; i++){
+			let tokens = {accessToken: rows[i].fitbit_access_token, refreshToken: rows[i].fitbit_refresh_token}
+
+			fitbit_functions.updateAvgDailySteps(tokens, rows[i].user_id, function(succesfulUpdate1){
+				if(succesfulUpdate1){
+					console.log('successful update 1')
+					fitbit_functions.updateRecentSteps(tokens, rows[i].user_id, function(succesfulUpdate2){
+						if(succesfulUpdate2){
+							console.log('successful update 2')
+						}else{
+							console.log('*** Dont update user (A)'+ rows[i].user_id)
+						}
+					})
+				}else{
+					console.log('*** Dont update user (B)'+ rows[i].user_id)
+				}
+			})
+		}
+		let sqlQuery = 'SELECT * FROM new_users ORDER BY recent_daily_steps DESC LIMIT '+limit
+		pool.useMysqlPool(sqlQuery, function(rows){
+			res.render('allUsers', {
+				pageName: 'All Users',
+				usersArr: rows,
+				userID: req.user
+			})
 		})
-		console.log('Query Successful!')
+
+
 	})
 })
 
@@ -59,19 +84,24 @@ router.route('/userProfile').get(checkIfLoggedInAuth, function(req,res){
 		}else{
 			console.log('AccTok: '+tokens.accessToken)
 			fitbit_functions.updateAvgDailySteps(tokens, req.user, function(succesfulUpdate){
-				console.log('CALLBACK IS A FUNCTION')
-			})
-			fitbit_functions.updateRecentSteps(tokens, req.user, function(succesfulUpdate){
 				if(succesfulUpdate){
-					loadUpUserPage(res, req.user)
+					fitbit_functions.updateRecentSteps(tokens, req.user, function(succesfulUpdate){
+						if(succesfulUpdate){
+							loadUpUserPage(res, req.user)
+						}else{
+							console.log('inner fail')
+							fitbit_functions.redirectToGetFitbitCode(res)
+						}
+					})
 				}else{
-					console.log('2 fail')
+					console.log('outer fail')
 					fitbit_functions.redirectToGetFitbitCode(res)
 				}
 			})
+			
 		}
 	})
-	
+
 
 })
 
@@ -88,7 +118,8 @@ function loadUpUserPage(res, userID){
 			floors: rows[0].floors,
 			userImage: rows[0].user_image_url,
 			fitbitId: rows[0].fitbit_user_id,
-			fitbitAccessToken: rows[0].fitbit_access_token
+			fitbitAccessToken: rows[0].fitbit_access_token,
+			userID: userID
 		})
 	})
 }

@@ -37,6 +37,7 @@ function updateAvgDailySteps(tokenObj, userID, callback){
 			let updateAverageStepsSQL = 'UPDATE new_users SET average_daily_steps = '+userData.user.averageDailySteps+' WHERE user_id = '+userID
 			pool.useMysqlPool(updateAverageStepsSQL, function(rows){
 				console.log('Average Daily Steps updated')
+				callback(true)
 			})
 		}
 	})

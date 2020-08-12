@@ -16,8 +16,7 @@ style
 h1(id="homePageTitle") CHINYELU
 	img(class='userImageTopBar' src=userImage style="border-radius: 10vmin; width:4vmin;")
 	a(class="authButtons notLoggedIn" href='/auth/login') Log In 
-	a(class="authButtons notLoggedIn") /
-	a(class="authButtons" href='/auth/logout') Log Out
+	a(class="authButtons loggedIn" href='/auth/logout') Log Out
 	ul(class="home-list")
 		//- li
 		//- 	a(href="/loginToFitbit") Fitbit Project
@@ -43,4 +42,9 @@ script(type="text/javascript").
 
 	if("#{userID}"){
 		$('.notLoggedIn').hide()
+		$('.loggedIn').show()
+	}
+	else{
+		$('.loggedIn').hide()
+		$('.notLoggedIn').show()
 	}

@@ -16,9 +16,8 @@ title Chinyelu Fitness
 div(class="top-bar")
 	h2(id="tobBarTitle")
 		a(href="/") CHINYELU
-		a(class="authButtons" href='/auth/login') Log In 
-		a(class="authButtons") /
-		a(class="authButtons" href='/auth/logout') Log Out
+		a(class="authButtons notLoggedIn" href='/auth/login') Log In 
+		a(class="authButtons loggedIn" href='/auth/logout') Log Out
 	ul(class="top-bar-list")
 		//- li
 		//- 	a(href="/loginToFitbit") Fitbit Project
@@ -36,3 +35,11 @@ div(class="top-bar")
 
 style
 	include ../testStyle.css
+
+script(type="text/javascript").
+	if("#{userID}"){
+		$('.notLoggedIn').hide()
+	}
+	else{
+		$('.loggedIn').hide()
+	}
